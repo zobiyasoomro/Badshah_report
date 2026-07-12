@@ -1,9 +1,6 @@
-@extend('layouts.master')
-
+@extends('layouts.master')
+@section('title', 'Home')
 @section('content')
 
-@include('hero')
-
-
-
+@include('components.btns')
 @endsection
