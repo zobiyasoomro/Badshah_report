@@ -8,7 +8,7 @@
            NAVBAR MAIN CONTAINER
         ========================= */
     .navbar-custom {
-        background: #08192f;
+        background: #2A4563 ;
         border-top: 2px solid #00d4ff;
         border-bottom: 1px solid rgba(0, 212, 255, .18);
         padding: 10px 0;
@@ -150,7 +150,7 @@
     .dropdown-menu {
         margin-top: 15px;
         min-width: 230px;
-        background: #08192f;
+        background: #2A4563 ;
         border: 1px solid rgba(0, 212, 255, .35);
         border-radius: 15px;
         overflow: hidden;
@@ -242,8 +242,9 @@
         }
 
         .logo-img {
-            width: 100px;
-            height: 100px;
+            margin-top: 8px;
+            width: 130px;
+            height: 130px;
         }
 
         /* Keeps dropdown menus cleanly confined to viewport boundaries */
@@ -256,15 +257,15 @@
         .navbar-collapse {
             border-radius: 4%;
             position: absolute;
-            top: 117%;
+            top: 137%;
             left: 0;
             right: 0;
             width: 100%;
-            background: #08192f;
+            background: #2A4563 ;
             padding: 40px 20px 20px 20px;
             border-bottom: 2px solid #00d4ff;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-            /* z-index: 10010; */
+            z-index: 10000;
             /* Lower layer depth index priority compared to interactive avatar wrappers */
         }
 
@@ -299,14 +300,14 @@
                     </div>
                 </div>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">My Account</a></li>
-                <li><a class="dropdown-item" href="#">Withdraw</a></li>
-                <li><a class="dropdown-item" href="#">Deposit</a></li>
+            <ul class="dropdown-menu dropdown-menu-end" >
+                <li><a class="dropdown-item" href="#" style="font-size: larger;">My Account</a></li>
+                <li><a class="dropdown-item" href="#" style="font-size: larger;">Withdraw</a></li>
+                <li><a class="dropdown-item" href="#" style="font-size: larger;">Deposit</a></li>
                 <li>
                     <hr class="dropdown-divider">
                 </li>
-                <li><a class="dropdown-item text-danger" href="#">Log Out</a></li>
+                <li><a class="dropdown-item" href="#" style="font-size: larger; color: #ef5555;">Log Out</a></li>
             </ul>
         </div>
 

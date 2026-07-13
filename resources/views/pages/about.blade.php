@@ -1,6 +1,12 @@
 @extends('layouts.master')
 
 @section('content')
+@include('components.pagesbanner', [
+        'banner_title' => 'ABOUT US',
+        'banner_button_text' => 'LEARN MORE',
+        'banner_button_url' => 'WHY YOU CHOOSE US',
+        'banner_description' => 'Have questions, feedback, or want to talk with us? Our team is ready to assist you anytime.'
+    ])
     <!-- Core Viewport Framework Locked to Original Design Structure -->
     <section class="about-hero-layout position-relative min-vh-100 py-4 py-lg-5">
         <div class="container custom-premium-container text-white">
@@ -43,7 +49,7 @@
 
                         <!-- Inner Container Core holding Logo Asset (Fitted Masking) -->
                         <div class="portal-center-core d-flex align-items-center justify-content-center overflow-hidden">
-                            <img src="{{ asset('images/logo.jpeg') }}" alt="bpn" class="img-fluid brand-logo-image">
+                            <img src="{{ asset('images/logo.png') }}" alt="bpn" class="img-fluid brand-logo-image">
                         </div>
                     </div>
                 </div>
@@ -189,7 +195,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@700;800;900&display=swap');
 
         :root {
-            --deep-background: #060c18;
+            --deep-background: #2A4563 ;
             --neon-cyan-color: #00f3ff;
             --glow-depth-shadow: rgba(0, 243, 255, 0.4);
             --text-pure-clear: rgba(255, 255, 255, 0.98);
@@ -397,7 +403,7 @@
         }
 
         .premium-interactive-panel {
-            background: rgba(6, 12, 24, 0.5);
+            background: #2a4563;
             border-left: 3px solid var(--neon-cyan-color);
         }
 
