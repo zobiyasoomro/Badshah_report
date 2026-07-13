@@ -2,7 +2,7 @@
     <style>
         /* Block Component: Direct UI Action Section */
         .cta-section {
-            background: linear-gradient(135deg, #0F172A 0%, #1E2937 100%);
+            background: linear-gradient(135deg, #2A4563 0%, #1B314A 100%);
             min-height: 280px;
             position: relative;
             overflow: hidden;
@@ -20,7 +20,7 @@
             right: 10%;
             width: 160px;
             height: 160px;
-            background: rgba(34, 211, 238, 0.08);
+            background: rgba(42, 69, 238, 0.08);
             border: 2px solid rgba(34, 211, 238, 0.2);
             border-radius: 16px;
             transform: rotate(15deg);
@@ -73,7 +73,7 @@
         
         /* Modifier: Deposit Button Specific Styles */
         .cta-section__btn--deposit {
-            background: #22C55E;
+            background: #00B282 ;
             box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
         }
         
@@ -83,7 +83,7 @@
         
         /* Modifier: Withdraw Button Specific Styles */
         .cta-section__btn--withdraw {
-            background: #EF4444;
+            background: #ef5555;
             box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
         }
         
