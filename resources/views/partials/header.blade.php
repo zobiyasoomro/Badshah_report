@@ -8,7 +8,7 @@
            NAVBAR MAIN CONTAINER
         ========================= */
     .navbar-custom {
-        background: #2A4563 ;
+        background: #2A4563;
         border-top: 2px solid #00d4ff;
         border-bottom: 1px solid rgba(0, 212, 255, .18);
         padding: 10px 0;
@@ -150,7 +150,7 @@
     .dropdown-menu {
         margin-top: 15px;
         min-width: 230px;
-        background: #2A4563 ;
+        background: #2A4563;
         border: 1px solid rgba(0, 212, 255, .35);
         border-radius: 15px;
         overflow: hidden;
@@ -261,7 +261,7 @@
             left: 0;
             right: 0;
             width: 100%;
-            background: #2A4563 ;
+            background: #2A4563;
             padding: 40px 20px 20px 20px;
             border-bottom: 2px solid #00d4ff;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
@@ -274,6 +274,76 @@
             text-align: center;
             gap: 20px;
         }
+    }
+
+    .profile-container {
+        display: flex;
+        align-items: center;
+        gap: 1px;
+    }
+
+    .profile-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2A4563, #00E5FF);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        text-transform: uppercase;
+        overflow: hidden;
+    }
+
+    .profile-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .profile-name {
+        color: white;
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .profile-username {
+        font-size: 11px;
+        color: #9ca3af;
+    }
+
+    .dropdown-toggle::after {
+        color: white;
+    }
+
+    .dropdown-menu {
+        background: #172844;
+        border: 1px solid rgba(59, 90, 122, 0.3);
+        border-radius: 12px;
+        padding: 8px;
+        min-width: 200px;
+    }
+
+    .dropdown-item {
+        color: #d1d5db;
+        border-radius: 8px;
+        padding: 8px 16px;
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-item:hover {
+        background: #2A4563;
+        color: white;
+    }
+
+    .dropdown-divider {
+        border-color: rgba(59, 90, 122, 0.3);
+    }
+
+    .btn:focus {
+        box-shadow: none;
     }
 </style>
 
@@ -291,23 +361,67 @@
         </a>
 
         <div class="dropdown profile-dropdown-wrapper order-3">
-            <button class="btn dropdown-toggle d-flex align-items-center p-0" type="button"
-                data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn dropdown-toggle d-flex align-items-center p-0" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false" style="border: none; background: transparent;">
                 <div class="profile-container">
-                    <div class="profile-avatar">AR</div>
+                    <div class="profile-avatar">
+                        @if(Auth::check() && Auth::user()->image)
+                            <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}"
+                                style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                        @else
+                            {{ Auth::check() ? Auth::user()->getInitialsAttribute() : 'GU' }}
+                        @endif
+                    </div>
                     <div class="d-none d-md-block">
-                        <div class="profile-name">Alex Rivera</div>
+                        <div class="profile-name">{{ Auth::check() ? Auth::user()->name : 'Guest' }}</div>
+                        <div class="profile-username" style="font-size: 11px; color: #9ca3af;">
+                            @if(Auth::check())
+                                {{ Auth::user()->user_name }}
+                            @endif
+                        </div>
                     </div>
                 </div>
             </button>
-            <ul class="dropdown-menu dropdown-menu-end" >
-                <li><a class="dropdown-item" href="#" style="font-size: larger;">My Account</a></li>
-                <li><a class="dropdown-item" href="#" style="font-size: larger;">Withdraw</a></li>
-                <li><a class="dropdown-item" href="#" style="font-size: larger;">Deposit</a></li>
+            <ul class="dropdown-menu dropdown-menu-end">
                 <li>
-                    <hr class="dropdown-divider">
+                    <div class="dropdown-item"
+                        style="font-weight: 600; color: white; border-bottom: 1px solid rgba(59, 90, 122, 0.3);">
+                        <i class="fas fa-user me-2"></i> {{ Auth::check() ? Auth::user()->name : 'Guest' }}
+                    </div>
                 </li>
-                <li><a class="dropdown-item" href="#" style="font-size: larger; color: #ef5555;">Log Out</a></li>
+
+                @if(Auth::check())
+                    <!-- Show these items only when logged in -->
+                    <li><a class="dropdown-item" href="#" style="font-size: larger;">
+                            <i class="fas fa-user-edit me-2"></i> My Account
+                        </a></li>
+                    <li><a class="dropdown-item" href="#" style="font-size: larger;">
+                            <i class="fas fa-arrow-up me-2"></i> Withdraw
+                        </a></li>
+                    <li><a class="dropdown-item" href="#" style="font-size: larger;">
+                            <i class="fas fa-arrow-down me-2"></i> Deposit
+                        </a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li>
+                        <form action="{{ route('auth.logout') }}" method="POST" style="display: inline;">
+                            @csrf
+                            <button type="submit" class="dropdown-item"
+                                style="font-size: larger; color: #ef5555; background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
+                                <i class="fas fa-sign-out-alt me-2"></i> Log Out
+                            </button>
+                        </form>
+                    </li>
+                @else
+                    <!-- Show only Login when not logged in -->
+                    <li>
+                        <a class="dropdown-item" href="{{ route('auth.login.page') }}"
+                            style="font-size: larger; color: #00E5FF; font-weight: 600;">
+                            <i class="fas fa-sign-in-alt me-2"></i> Login
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
 
@@ -315,8 +429,9 @@
             <ul class="navbar-nav mx-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('pages.home') }}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('pages.about') }}">About</a>
-                <li class="nav-item"><a class="nav-link" href="#">Platforms</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Blogs</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('pages.platforms') }}">Platforms</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('pages.planes') }}">Planes</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('pages.blog') }}">Blogs</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('pages.contact') }}">Contact Us</a></li>
             </ul>
         </div>

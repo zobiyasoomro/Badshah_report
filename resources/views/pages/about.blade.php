@@ -1,60 +1,56 @@
 @extends('layouts.master')
 
 @section('content')
+
+
 @include('components.pagesbanner', [
         'banner_title' => 'ABOUT US',
         'banner_button_text' => 'LEARN MORE',
         'banner_button_url' => 'WHY YOU CHOOSE US',
         'banner_description' => 'Have questions, feedback, or want to talk with us? Our team is ready to assist you anytime.'
     ])
-    <!-- Core Viewport Framework Locked to Original Design Structure -->
+  
     <section class="about-hero-layout position-relative min-vh-100 py-4 py-lg-5">
         <div class="container custom-premium-container text-white">
+<div class="row align-items-center gy-5 mb-5 py-3">
 
-            <!-- Upper Hero Section: Locked Side-by-Side Asymmetric Grid -->
-            <div class="row align-items-center justify-content-between gy-5 mb-5 py-3">
+    <!-- Left Content -->
+<div class="col-lg-7 col-md-6 order-1 text-center text-md-start">
+            <span class="text-uppercase tracking-widest text-cyan fw-bold fs-7 mb-2 d-block opacity-90">
+            {{ $about->subtitle }}
+        </span>
 
-                <!-- Left Side: Copy Elements & Action Callouts -->
-                <div class="col-lg-7 text-start">
-                    <span class="text-uppercase tracking-widest text-cyan fw-bold fs-7 mb-2 d-block opacity-90">
-                        The Premium Platform ⟶
-                    </span>
-                    <h1 class="fw-bold text-white mb-4 main-crypto-title">
-                        REDEFINING THE<br><span class="text-cyan text-glow-cyan">EXCHANGE</span>
-                    </h1>
-                    <p class="hero-description-text mb-3">
-                        BetPro Exchange is a premium, high-liquidity peer-to-peer ecosystem built for players who demand
-                        ultimate market transparency and ultra-competitive odds.
-                    </p>
-                    <p class="hero-description-text mb-4 secondary-paragraph">
-                        Unlike traditional books that fix margins against you, our platform lets you back, lay, and set your
-                        own terms with absolute transparency. Driven by advanced real-time matching engines, we connect
-                        global traders directly to the action.
-                    </p>
+        <h1 class="fw-bold text-white mb-4 main-crypto-title">
+            {{ $about->title }}
+        </h1>
 
-                    <!-- Action Button Trigger -->
-                    <div class="mt-4 pt-1">
-                        <button
-                            class="btn btn-cyber-cyan-premium px-4 py-25 fw-bold text-white text-uppercase tracking-wider">
-                            Our Strategic Vision
-                        </button>
-                    </div>
-                </div>
+      <p class="hero-description-text mb-4 secondary-paragraph text-break">
+    {!! nl2br(e($about->description)) !!}
+</p>
 
-                <!-- Right Side: Circular Geometric Visualizer Core -->
-                <div class="col-lg-5 text-center d-flex justify-content-lg-end justify-content-center">
-                    <div class="original-portal-ring-frame">
-                        <!-- Outer Dynamic Dash Tracers -->
-                        <div class="portal-tracer ring-dashed-glow"></div>
+<div class="mt-4 pt-1 d-flex justify-content-center justify-content-md-start">
+                <button
+                class="btn btn-cyber-cyan-premium px-4 py-25 fw-bold text-white text-uppercase tracking-wider">
+                Our Strategic Vision
+            </button>
+        </div>
 
-                        <!-- Inner Container Core holding Logo Asset (Fitted Masking) -->
-                        <div class="portal-center-core d-flex align-items-center justify-content-center overflow-hidden">
-                            <img src="{{ asset('images/logo.png') }}" alt="bpn" class="img-fluid brand-logo-image">
-                        </div>
-                    </div>
-                </div>
+    </div>
 
+    <!-- Right Logo -->
+<div class="col-lg-5 col-md-6 text-center order-2">
+        <div class="original-portal-ring-frame mx-auto">
+            <div class="portal-tracer ring-dashed-glow"></div>
+
+            <div class="portal-center-core d-flex align-items-center justify-content-center overflow-hidden">
+                <img src="{{ asset('images/logo.png') }}" alt="bpn" class="img-fluid brand-logo-image">
             </div>
+        </div>
+
+    </div>
+
+</div>
+                    
 
             <!-- Middle Section: Horizontal Metric Grid System -->
             <div class="row g-4 mb-5 py-4">
@@ -129,9 +125,9 @@
                             maintaining consistent dynamic matching depth even during peak sports field events.
                         </p>
                         <ul class="list-unstyled feature-checklist-premium architecture-card-text">
-                            <li class="mb-2"><span class="text-cyan me-2">✓</span> Automated matching index settlement</li>
-                            <li class="mb-2"><span class="text-cyan me-2">✓</span> Zero margin spread inflation gates</li>
-                            <li class="mb-2"><span class="text-cyan me-2">✓</span> Independent security clearing layers</li>
+                            <li class="mb-2"><span class="text-cyan me-2">âœ“</span> Automated matching index settlement</li>
+                            <li class="mb-2"><span class="text-cyan me-2">âœ“</span> Zero margin spread inflation gates</li>
+                            <li class="mb-2"><span class="text-cyan me-2">âœ“</span> Independent security clearing layers</li>
                         </ul>
                     </div>
                     <div class="col-lg-6">
