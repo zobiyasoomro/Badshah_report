@@ -4,7 +4,7 @@
    @include('components.pagesbanner', [
         'banner_title' => 'CONTACT US',
         'banner_button_text' => 'Get In Touch',
-        'banner_button_url' => 'We’re Here to Help',
+        'banner_button_url' => 'Weâ€™re Here to Help',
         'banner_description' => 'Have questions, feedback, or want to talk with us? Our team is ready to assist you anytime.'
     ])
     <!-- Core Viewport Framework Matching Premium Dark Aesthetics -->
@@ -44,14 +44,14 @@
                                 balance transfers.</p>
                             <a href="mailto:support@betproexchange.com"
                                 class="channel-link font-orbitron text-cyan text-decoration-none small">support@betproexchange.com
-                                →</a>
+                                â†’</a>
                         </div>
 
                         <!-- Channel Card 2 (UPDATED: Dual Numbers with Interactive WhatsApp Icon) -->
                         <div class="premium-channel-card p-4">
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <div class="channel-icon-wrapper d-flex align-items-center justify-content-center">
-                                    <span class="text-cyan font-orbitron fw-bold">💬</span>
+                                    <span class="text-cyan font-orbitron fw-bold">ðŸ’¬</span>
                                 </div>
                                 <h4 class="h6 font-orbitron text-white mb-0 tracking-wide text-uppercase">Contact Us via
                                     WhatsApp</h4>
@@ -66,7 +66,7 @@
                                     class="channel-link text-decoration-none">+1 (234) 567-890</a>
                                 <i class="fab fa-whatsapp whatsapp-inline-icon mx-1"></i>
                                 <a href="https://wa.me/1987654321" target="_blank"
-                                    class="channel-link text-decoration-none">+1 (987) 654-321 →</a>
+                                    class="channel-link text-decoration-none">+1 (987) 654-321 â†’</a>
                             </div>
                         </div>
 
@@ -91,21 +91,27 @@
                     <div class="premium-form-container p-4 p-md-5 h-100">
                         <h3 class="h5 font-orbitron text-white mb-4 tracking-wide text-uppercase">Transmit Secure Message
                         </h3>
+@if(session('success'))
+    <div class="alert alert-success" id="success-alert">
+        {{ session('success') }}
+    </div>
+@endif
 
-                        <form action="#" method="POST" autocomplete="off">
-                            @csrf
+
+                       <form action="{{ route('contact.store') }}" method="POST">
+    @csrf
                             <div class="row g-3">
                                 <!-- Identity Inputs -->
                                 <div class="col-md-6">
                                     <div class="form-group-premium">
-                                        <label class="form-label-premium font-orbitron">Your Designation / Name</label>
+                                        <label class="form-label-premium font-orbitron">Name</label>
                                         <input type="text" name="name" class="form-control-premium"
                                             placeholder="e.g. Alex Mercer" required>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group-premium">
-                                        <label class="form-label-premium font-orbitron">Secure Return Email</label>
+                                        <label class="form-label-premium font-orbitron">Your Email</label>
                                         <input type="email" name="email" class="form-control-premium"
                                             placeholder="name@domain.com" required>
                                     </div>
@@ -114,7 +120,7 @@
                                 <!-- Context/Subject Header Input -->
                                 <div class="col-12">
                                     <div class="form-group-premium">
-                                        <label class="form-label-premium font-orbitron">Operational Context /
+                                        <label class="form-label-premium font-orbitron">Title/
                                             Subject</label>
                                         <input type="text" name="subject" class="form-control-premium"
                                             placeholder="e.g. API Node Latency Optimization Check" required>
@@ -124,9 +130,8 @@
                                 <!-- Detailed Text Content Block -->
                                 <div class="col-12">
                                     <div class="form-group-premium">
-                                        <label class="form-label-premium font-orbitron">Core Transmission Payload /
-                                            Message</label>
-                                        <textarea name="message" rows="5" class="form-control-premium textarea-premium"
+                                        <label class="form-label-premium font-orbitron">Content/Description</label>
+                                        <textarea name="description" rows="5" class="form-control-premium textarea-premium"
                                             placeholder="Detail your exact query or required technical parameters here..."
                                             required></textarea>
                                     </div>
@@ -136,7 +141,7 @@
                                 <div class="col-12 pt-2">
                                     <button type="submit"
                                         class="btn btn-cyber-cyan-premium w-100 py-3 fw-bold text-white text-uppercase tracking-wider">
-                                        Dispatch Message Vector
+                                        Submit
                                     </button>
                                 </div>
                             </div>
@@ -356,4 +361,14 @@
             box-shadow: 0 0 8px #27c93f;
         }
     </style>
+
+    <script>
+    setTimeout(function () {
+        let alert = document.getElementById('success-alert');
+
+        if (alert) {
+            alert.style.display = 'none';
+        }
+    }, 4000);
+</script>
 @endsection

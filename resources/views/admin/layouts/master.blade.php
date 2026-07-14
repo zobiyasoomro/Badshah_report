@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    @include('admin.partials.head')
+</head>
+<body class="bg-[#f8f9fa] text-gray-800 antialiased font-sans">
 
-@include('admin.partials.head')
+    <!-- Sidebar Include Component -->
+    @include('admin.partials.sidebar')
 
-<body>
+    <!-- Main Content Area -->
+    <div class="lg:pl-64 min-h-screen flex flex-col">
+        
+        <!-- Header Include Component -->
+        @include('admin.partials.header')
 
-    @include('admin.partials.navbar')
+        <!-- Dynamic Content -->
+        <main class="flex-1 p-6">
+            @yield('admin_content')
+        </main>
 
-    <div class="container-fluid">
-        <div class="row">
-
-            @include('admin.partials.sidebar')
-
-            <main class="col-md-10 ms-sm-auto px-4 py-4">
-                @yield('content')
-            </main>
-
-        </div>
     </div>
 
-    @include('admin.partials.footer')
+    <!-- Scripts -->
     @include('admin.partials.script')
-
-    @stack('scripts')
-
 </body>
 </html>

@@ -3,4 +3,7 @@
 @section('content')
 
 @include('components.btns')
+
+@include('components.testimonial')
+
 @endsection

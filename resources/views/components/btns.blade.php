@@ -8,8 +8,8 @@
             overflow: hidden;
             display: flex;
             align-items: center;
-            border-top: 6px solid #22D3EE;     
-            border-bottom: 6px solid #22D3EE;  
+            border-top: 2px solid #22D3EE;     
+            border-bottom: 2px solid #22D3EE;  
         }
         
         /* Decorative Background Elements - Subse piche layer (z-index: 1) */
