@@ -13,12 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('user_name')->unique();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email')->nullable()->unique();
+            $table->string('image')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('whatsapp_number');
+            $table->string('city')->nullable();
+            $table->boolean('register_account')->default(1);
+            $table->boolean('unregister_account')->default(0);
             $table->rememberToken();
             $table->timestamps();
+            
+            // Add indexes for faster lookups
+            $table->index('user_name');
+            $table->index('whatsapp_number');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -1,8 +1,7 @@
 @extends('admin.layouts.master')
-@section('title', 'About')
+@section('title', 'Dashboard')
+@section('admin_content')
+<h1>about form here </h1>
 
-@section('content')
-
-<h2>About Us Management</h2>
 
 @endsection

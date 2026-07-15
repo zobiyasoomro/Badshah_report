@@ -14,13 +14,13 @@
     .custom-footer {
         background-color: #2A4563;
         color: #a5bacc;
-        padding-top: 10px;
+        padding-top: 44px;
         padding-bottom: 10px;
         font-size: 18px;
         position: relative;
         z-index: 1;
         overflow: hidden;
-        min-height: 400px;
+        min-height: 312px;
     }
 
     /* Pseudo-element for the background card image */
@@ -49,7 +49,7 @@
 
     .custom-footer h5 {
         color: #ffffff;
-        font-size: 18px;
+        font-size: 22px;
         font-weight: 600;
         margin-bottom: 25px;
     }
