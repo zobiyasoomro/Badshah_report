@@ -3,7 +3,6 @@
     class="fixed top-0 left-0 z-40 w-64 h-screen bg-white border-r border-gray-200 transition-transform -translate-x-full lg:translate-x-0">
     <div class="h-full flex flex-col">
         <!-- Brand Logo -->
-        <!-- Brand Logo -->
         <div class="flex items-center justify-between px-6 h-20 border-b border-gray-200"
             style="background-color: #2A4563 ;">
 
@@ -29,28 +28,29 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <!-- ✅ ADDED: href="{{ route('admin.about') }}" -->
+                    <a href="{{ route('admin.about') }}"
                         class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.about') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
                         <i class="fa-solid fa-info-circle w-5"></i>
                         About
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('admin.platforms') }}"
                         class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.platforms') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
                         <i class="fa-solid fa-cubes w-5"></i>
                         Platforms
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('admin.blog') }}"
                         class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.blog') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
                         <i class="fa-solid fa-blog w-5"></i>
                         Blog
                     </a>
                 </li>
                 <li>
-                    <a href="#"
+                    <a href="{{ route('admin.contact') }}"
                         class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.contact') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
                         <i class="fa-solid fa-envelope w-5"></i>
                         Contact

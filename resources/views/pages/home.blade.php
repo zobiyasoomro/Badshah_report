@@ -4,6 +4,7 @@
 
 @include('components.btns')
 
+@include('components.faq')
 @include('components.testimonial')
 
 @endsection
