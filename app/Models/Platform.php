@@ -5,17 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class AboutPage extends Model
+class Platform extends Model
 {
     use HasFactory;
 
-    protected $table = 'about_pages';
-
     protected $fillable = [
-        'title',
+        'name',
         'subtitle',
         'description',
         'logo',
-        // 'is_active'
+        'join_url',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => 'boolean',
     ];
 }

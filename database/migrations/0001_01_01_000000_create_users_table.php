@@ -21,6 +21,13 @@ return new class extends Migration
             $table->string('password');
             $table->string('whatsapp_number');
             $table->string('city')->nullable();
+            
+            // --- NEW FIELDS ADDED HERE ---
+            $table->string('address')->nullable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
+            // -----------------------------
+
             $table->boolean('register_account')->default(1);
             $table->boolean('unregister_account')->default(0);
             $table->rememberToken();

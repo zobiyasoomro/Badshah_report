@@ -44,15 +44,15 @@
                                 balance transfers.</p>
                             <a href="mailto:support@betproexchange.com"
                                 class="channel-link font-orbitron text-cyan text-decoration-none small">support@betproexchange.com
-                                â†’</a>
+                                </a>
                         </div>
 
                         <!-- Channel Card 2 (UPDATED: Dual Numbers with Interactive WhatsApp Icon) -->
                         <div class="premium-channel-card p-4">
                             <div class="d-flex align-items-center gap-3 mb-3">
                                 <div class="channel-icon-wrapper d-flex align-items-center justify-content-center">
-                                    <span class="text-cyan font-orbitron fw-bold">ðŸ’¬</span>
-                                </div>
+        <i class="fab fa-whatsapp text-cyan" style="font-size: 24px;"></i>
+    </div>
                                 <h4 class="h6 font-orbitron text-white mb-0 tracking-wide text-uppercase">Contact Us via
                                     WhatsApp</h4>
                             </div>
@@ -66,7 +66,7 @@
                                     class="channel-link text-decoration-none">+1 (234) 567-890</a>
                                 <i class="fab fa-whatsapp whatsapp-inline-icon mx-1"></i>
                                 <a href="https://wa.me/1987654321" target="_blank"
-                                    class="channel-link text-decoration-none">+1 (987) 654-321 â†’</a>
+                                    class="channel-link text-decoration-none">+1 (987) 654-321 </a>
                             </div>
                         </div>
 

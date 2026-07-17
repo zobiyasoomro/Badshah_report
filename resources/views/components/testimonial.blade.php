@@ -14,7 +14,7 @@
       color: #00e5ff !important;
     }
     .text-secondary {
-      color: #8b95ab !important;
+      color: #fff !important;
     }
     .display-4 {
       font-weight: 700;

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\AboutPage;
+use Illuminate\Support\Facades\Auth;
 
 class BackendPageController extends Controller
 {
@@ -14,7 +16,9 @@ class BackendPageController extends Controller
 
     public function about()
     {
-        return view('admin.pages.about.index');
+        // Fetch the about data
+        $about = AboutPage::first();
+        return view('admin.pages.about.index', compact('about'));
     }
 
     public function platforms()
@@ -22,13 +26,14 @@ class BackendPageController extends Controller
         return view('admin.pages.platforms.index');
     }
 
-    public function blog()
-    {
-        return view('admin.pages.blog.index');
-    }
-
     public function contact()
     {
         return view('admin.pages.contact.index');
+    }
+
+    public function profile()
+    {
+        $user = Auth::user();
+        return view('admin.pages.profile.index', compact('user'));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Models\AboutPage;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
 class AboutController extends Controller
 {
@@ -12,6 +13,12 @@ class AboutController extends Controller
     {
         $about = AboutPage::first();
         return view('pages.about', compact('about'));
+    }
+
+    public function edit()
+    {
+        $about = AboutPage::first();
+        return view('admin.pages.about.index', compact('about'));
     }
 
     public function update(Request $request)
@@ -28,15 +35,26 @@ class AboutController extends Controller
         $about->title = $request->title;
         $about->subtitle = $request->subtitle;
         $about->description = $request->description;
-        $about->button_text = $request->button_text;
-        $about->button_url = $request->button_url;
 
+        // Handle logo upload
         if ($request->hasFile('logo')) {
-            $about->logo = $request->file('logo')->store('about', 'public');
+            // Delete the old logo file from public/images if one exists
+            if ($about->logo && file_exists(public_path($about->logo))) {
+                @unlink(public_path($about->logo));
+            }
+
+            $file = $request->file('logo');
+            $filename = time() . '_' . Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension();
+
+            // Move file to public/images directory
+            $file->move(public_path('images'), $filename);
+
+            // Store the relative path so asset($about->logo) resolves correctly
+            $about->logo = 'images/' . $filename;
         }
 
         $about->save();
 
-        return back()->with('success', 'About Page Updated Successfully!');
+        return redirect()->route('admin.about')->with('success', 'About Page Updated Successfully!');
     }
 }

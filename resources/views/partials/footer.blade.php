@@ -128,7 +128,8 @@
     }
 
     .footer-bottom {
-        background-color: #172844;
+        background-color: #1d334d;
+;
         color: #ffffffef;
         padding: 20px 0;
         font-size: 13px;

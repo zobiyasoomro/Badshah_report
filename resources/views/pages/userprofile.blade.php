@@ -2,889 +2,925 @@
 @section('title', 'User Profile')
 @section('content')
 
-<style>
-    :root {
-        --primary-color: #27d3e3;
-        --primary-hover: #27d3e3a5;
-        --bg-gradient: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-        --sidebar-bg: #2a4563;
-        --text-dark: #172844;
-        --input-bg: #f5f6f8;
-        --border-color: #ddd;
-        --transition-speed: 0.3s;
-    }
 
-    /* Container to center the wizard card */
-    .wizard-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        min-height: calc(100vh - 200px);
-        padding: 20px;
-        width: 100%;
-    }
 
-    .wizard-card {
-        background-color: #ffffff;
-        width: 100%;
-        max-width: 950px;
-        min-height: 550px;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-        display: flex;
-        overflow: hidden;
-        position: relative;
-    }
-
-    /* --- Updated Toggler Button --- */
-    .menu-toggle-btn {
-        display: none;
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        background-color: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(0, 0, 0, 0.15);
-        border-radius: 6px;
-        width: 34px;
-        height: 34px;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        z-index: 99;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        transition: background-color 0.2s, transform 0.1s;
-    }
-
-    .menu-toggle-btn:hover {
-        background-color: #ffffff;
-    }
-
-    .menu-toggle-btn svg {
-        width: 18px;
-        height: 18px;
-        stroke: var(--text-dark);
-    }
-
-    /* --- Sidebar --- */
-    .sidebar {
-        background-color: var(--sidebar-bg);
-        width: 280px;
-        min-height: 100%;
-        padding: 35px 25px;
-        display: flex;
-        flex-direction: column;
-        gap: 25px;
-        position: relative;
-        left: 0;
-        flex-shrink: 0;
-        transition: left var(--transition-speed) ease-in-out;
-    }
-
-    .close-sidebar-btn {
-        display: none;
-        align-self: flex-end;
-        background: none;
-        border: none;
-        color: rgba(255, 255, 255, 0.7);
-        cursor: pointer;
-        padding: 5px;
-        margin-bottom: -10px;
-        transition: color 0.2s;
-    }
-
-    .close-sidebar-btn:hover {
-        color: #ffffff;
-    }
-
-    .close-sidebar-btn svg {
-        width: 24px;
-        height: 24px;
-    }
-
-    /* --- Sidebar Profile Image --- */
-    .sidebar-logo-container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 10px;
-        gap: 10px;
-    }
-
-    .sidebar-logo {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-
-    .sidebar-logo img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .sidebar-avatar-edit-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background-color: rgba(255, 255, 255, 0.15);
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        padding: 5px 12px;
-        border-radius: 20px;
-        color: #ffffff;
-        font-size: 0.75rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: background-color 0.2s, border-color 0.2s;
-    }
-
-    .sidebar-avatar-edit-btn:hover {
-        background-color: var(--primary-color);
-        border-color: var(--primary-color);
-    }
-
-    .sidebar-avatar-edit-btn svg {
-        width: 13px;
-        height: 13px;
-        fill: #ffffff;
-    }
-
-    .step-item {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        color: rgba(255, 255, 255, 0.7);
-        font-weight: 500;
-        font-size: 0.95rem;
-        transition: all var(--transition-speed) ease;
-        cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 8px;
-    }
-
-    .step-item:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .step-circle {
-        width: 24px;
-        height: 24px;
-        border: 2px dashed rgba(255, 255, 255, 0.6);
-        border-radius: 50%;
-        display: inline-block;
-        position: relative;
-        flex-shrink: 0;
-    }
-
-    .step-item.active {
-        color: #ffffff;
-        background-color: rgba(255, 255, 255, 0.1);
-    }
-
-    .step-item.active .step-circle {
-        border: 2px dashed transparent;
-        background-color: var(--primary-color);
-        box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.3);
-    }
-
-    .step-item.active .step-circle::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 10px;
-        height: 10px;
-        background-color: #ffffff;
-        border-radius: 50%;
-    }
-
-    /* --- Dark Overlay --- */
-    .sidebar-overlay {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.4);
-        z-index: 98;
-    }
-
-    /* --- Content Area --- */
-    .content-area {
-        flex-grow: 1;
-        padding: 40px 50px;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        transition: all var(--transition-speed);
-        background: #ffffff;
-    }
-
-    .form-title {
-        color: var(--text-dark);
-        font-size: 1.4rem;
-        text-transform: uppercase;
-        font-weight: 700;
-        margin-bottom: 30px;
-        letter-spacing: 0.5px;
-        border-bottom: 2px solid var(--primary-color);
-        padding-bottom: 12px;
-    }
-
-    .wizard-form {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        gap: 20px;
-    }
-
-    .form-step {
-        display: none;
-        flex-direction: column;
-        gap: 20px;
-        flex-grow: 1;
-        animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .form-step.active {
-        display: flex;
-    }
-
-    .user-profile-wrapper {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        margin-bottom: 10px;
-        flex-wrap: wrap;
-    }
-
-    .user-profile-preview {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        background-color: var(--input-bg);
-        border: 2px dashed #ccc;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        position: relative;
-        flex-shrink: 0;
-    }
-
-    .user-profile-preview img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .user-profile-preview svg {
-        width: 45px;
-        height: 45px;
-        fill: #aaa;
-    }
-
-    .user-profile-upload-btn {
-        background-color: var(--input-bg);
-        border: 1px solid var(--border-color);
-        padding: 10px 18px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #555;
-        transition: all 0.2s;
-    }
-
-    .user-profile-upload-btn:hover {
-        background-color: #eef0f4;
-        border-color: #ccc;
-    }
-
-    .input-group {
-        position: relative;
-        width: 100%;
-    }
-
-    .input-group input {
-        width: 100%;
-        padding: 14px 18px;
-        background-color: var(--input-bg);
-        border: 1px solid transparent;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        color: #333;
-        outline: none;
-        transition: all 0.2s;
-    }
-
-    .input-group input[type="password"],
-    .input-group input[type="text"].password-field {
-        padding-right: 50px;
-    }
-
-    .input-group input::placeholder {
-        color: #a0a5b0;
-    }
-
-    .input-group input:focus {
-        background-color: #fff;
-        border-color: #1ea2e9;
-        box-shadow: 0 0 0 3px rgba(30, 162, 233, 0.1);
-    }
-
-    .toggle-password {
-        position: absolute;
-        right: 18px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #a0a5b0;
-        transition: color 0.2s, opacity 0.2s, visibility 0.2s;
-        user-select: none;
-        opacity: 0;
-        visibility: hidden;
-    }
-
-    .toggle-password.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .toggle-password:hover {
-        color: var(--primary-color);
-    }
-
-    .toggle-password svg {
-        width: 20px;
-        height: 20px;
-    }
-
-    .nav-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 15px;
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-    }
-
-    .nav-arrow {
-        background: var(--input-bg);
-        border: 1px solid var(--border-color);
-        color: var(--text-dark);
-        font-size: 1.2rem;
-        padding: 10px 25px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: all 0.2s;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .nav-arrow:hover:not(:disabled) {
-        background: var(--primary-color);
-        color: white;
-        border-color: var(--primary-color);
-        transform: scale(1.02);
-    }
-
-    .nav-arrow:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-        transform: none;
-    }
-
-    .submit-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-top: 20px;
-    }
-
-    .submit-btn {
-        background-color: #198754;
-        color: white;
-        border: none;
-        padding: 14px 40px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-weight: 600;
-        font-size: 1rem;
-        transition: background-color 0.2s, transform 0.1s;
-        box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2);
-        width: 100%;
-        max-width: 300px;
-    }
-
-    .submit-btn:hover {
-        background-color: #157347;
-        transform: translateY(-1px);
-    }
-
-    .submit-btn:active {
-        transform: translateY(1px);
-    }
-
-    /* --- Media Query for Mobile/Tablet --- */
-    @media (max-width: 768px) {
-        .wizard-container {
-            padding: 10px;
-            min-height: calc(100vh - 100px);
+    <style>
+        /* ===== Unique Namespace: upw (User Profile Wizard) ===== */
+        :root {
+            --upw-primary: #27d3e3;
+            --upw-primary-hover: #27d3e3a5;
+            --upw-bg-gradient: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            --upw-sidebar-bg: #2a4563;
+            --upw-text-dark: #172844;
+            --upw-input-bg: #f5f6f8;
+            --upw-border-color: #ddd;
+            --upw-transition: 0.3s;
         }
 
-        .wizard-card {
-            flex-direction: column;
-            height: auto;
-            min-height: 500px;
-        }
-
-        .menu-toggle-btn {
+        /* ----- Container ----- */
+        .upw-wizard-container {
             display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 200px);
+            padding: 20px;
+            width: 100%;
         }
 
-        .sidebar {
+        /* ----- Wizard Card ----- */
+        .upw-wizard-card {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 950px;
+            min-height: 550px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ----- Toggler Button ----- */
+        .upw-menu-toggle-btn {
+            display: none;
             position: absolute;
-            left: -280px;
-            top: 0;
-            z-index: 100;
+            top: 15px;
+            left: 15px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            border-radius: 6px;
+            width: 34px;
+            height: 34px;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 99;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .upw-menu-toggle-btn:hover {
+            background-color: #ffffff;
+        }
+
+        .upw-menu-toggle-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--upw-text-dark);
+        }
+
+        /* ----- Sidebar ----- */
+        .upw-sidebar {
+            background-color: var(--upw-sidebar-bg);
+            width: 280px;
             min-height: 100%;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.2);
-        }
-
-        .sidebar.open {
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            position: relative;
             left: 0;
+            flex-shrink: 0;
+            transition: left var(--upw-transition) ease-in-out;
         }
 
-        .close-sidebar-btn {
-            display: block;
+        .upw-close-sidebar-btn {
+            display: none;
+            align-self: flex-end;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            padding: 5px;
+            margin-bottom: -10px;
+            transition: color 0.2s;
         }
 
-        .sidebar-overlay.active {
-            display: block;
+        .upw-close-sidebar-btn:hover {
+            color: #ffffff;
         }
 
-        .content-area {
-            padding: 70px 20px 30px 20px;
+        .upw-close-sidebar-btn svg {
+            width: 24px;
+            height: 24px;
         }
 
-        .form-title {
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-        }
-
-        .nav-buttons {
-            flex-direction: row;
-            justify-content: space-between;
+        /* ----- Sidebar Profile Image ----- */
+        .upw-sidebar-logo-container {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
             gap: 10px;
         }
 
-        .nav-arrow {
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            flex: 1;
+        .upw-sidebar-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            display: flex;
             justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
 
-        .user-profile-wrapper {
-            justify-content: center;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .wizard-container {
-            padding: 5px;
+        .upw-sidebar-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
-        .content-area {
-            padding: 60px 15px 20px 15px;
+        .upw-sidebar-avatar-edit-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 12px;
+            border-radius: 20px;
+            color: #ffffff;
+            font-size: 0.75rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
         }
 
-        .form-title {
-            font-size: 1rem;
+        .upw-sidebar-avatar-edit-btn:hover {
+            background-color: var(--upw-primary);
+            border-color: var(--upw-primary);
         }
 
-        .input-group input {
-            padding: 12px 15px;
+        .upw-sidebar-avatar-edit-btn svg {
+            width: 13px;
+            height: 13px;
+            fill: #ffffff;
+        }
+
+        /* ----- Step Items ----- */
+        .upw-step-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all var(--upw-transition) ease;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+        }
+
+        .upw-step-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .upw-step-circle {
+            width: 24px;
+            height: 24px;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .upw-step-item.active {
+            color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .upw-step-item.active .upw-step-circle {
+            border: 2px dashed transparent;
+            background-color: var(--upw-primary);
+            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.3);
+        }
+
+        .upw-step-item.active .upw-step-circle::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 10px;
+            height: 10px;
+            background-color: #ffffff;
+            border-radius: 50%;
+        }
+
+        /* ----- Sidebar Overlay ----- */
+        .upw-sidebar-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 98;
+        }
+
+        .upw-sidebar-overlay.active {
+            display: block;
+        }
+
+        /* ----- Content Area ----- */
+        .upw-content-area {
+            flex-grow: 1;
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all var(--upw-transition);
+            background: #ffffff;
+        }
+
+        .upw-form-title {
+            color: var(--upw-text-dark);
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid var(--upw-primary);
+            padding-bottom: 12px;
+        }
+
+        .upw-wizard-form {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            gap: 24px;
+        }
+
+        .upw-form-step {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            flex-grow: 1;
+            animation: upw-fadeIn 0.3s ease;
+        }
+
+        @keyframes upw-fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .upw-form-step.active {
+            display: flex;
+        }
+
+        .upw-input-group {
+            position: relative;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .upw-input-group label {
             font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--upw-text-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .submit-btn {
-            padding: 12px 20px;
-            font-size: 0.9rem;
+        .upw-input-group input {
+            width: 100%;
+            padding: 14px 18px;
+            background-color: var(--upw-input-bg);
+            border: 1px solid transparent;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #333;
+            outline: none;
+            transition: all 0.2s;
         }
 
-        .sidebar {
-            width: 260px;
-            padding: 25px 20px;
+        .upw-input-group input.upw-action-padding {
+            padding-right: 85px;
         }
-    }
-</style>
 
-<div class="wizard-container">
-    <button type="button" class="menu-toggle-btn" id="menu-btn" aria-label="Open Steps Menu">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-        </svg>
-    </button>
+        .upw-input-group input::placeholder {
+            color: #a0a5b0;
+        }
 
-    <div class="wizard-card">
-        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        .upw-input-group input[readonly] {
+            background-color: #f0f2f5;
+            cursor: not-allowed;
+            color: #555;
+        }
 
-        <!-- Sidebar -->
-        <div class="sidebar" id="sidebar">
-            <button type="button" class="close-sidebar-btn" id="close-sidebar-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
+        .upw-input-group input:focus:not([readonly]) {
+            background-color: #fff;
+            border-color: #1ea2e9;
+            box-shadow: 0 0 0 3px rgba(30, 162, 233, 0.1);
+        }
 
-            <div class="sidebar-logo-container">
-                <input type="file" id="sidebar-avatar-input" accept="image/*" style="display: none;">
-                
-                <div class="sidebar-logo" id="sidebar-avatar-preview">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="Avatar" id="sidebar-avatar-img">
-                </div>
-                
-                <label for="sidebar-avatar-input" class="sidebar-avatar-edit-btn" title="Change Photo">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 4h3l2-3h6l2 3h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm8 3a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
+        /* ----- Input Actions ----- */
+        .upw-input-actions {
+            position: absolute;
+            right: 14px;
+            bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .upw-action-icon-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0a5b0;
+            transition: color 0.2s;
+        }
+
+        .upw-action-icon-btn:hover {
+            color: var(--upw-primary);
+        }
+
+        .upw-action-icon-btn svg {
+            width: 19px;
+            height: 19px;
+        }
+
+        .upw-copy-toast {
+            position: absolute;
+            right: 0;
+            top: -30px;
+            background: #172844;
+            color: #fff;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, transform 0.2s;
+            transform: translateY(5px);
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .upw-copy-toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* ----- Navigation Buttons ----- */
+        .upw-nav-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .upw-nav-arrow {
+            background: var(--upw-input-bg);
+            border: 1px solid var(--upw-border-color);
+            color: var(--upw-text-dark);
+            font-size: 1.2rem;
+            padding: 10px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .upw-nav-arrow:hover:not(:disabled) {
+            background: var(--upw-primary);
+            color: white;
+            border-color: var(--upw-primary);
+            transform: scale(1.02);
+        }
+
+        .upw-nav-arrow:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ----- Submit Button ----- */
+        .upw-submit-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .upw-submit-btn {
+            background-color: #198754;
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: background-color 0.2s, transform 0.1s;
+            box-shadow: 0 4px 12px rgba(25, 135, 84, 0.2);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .upw-submit-btn:hover {
+            background-color: #157347;
+            transform: translateY(-1px);
+        }
+
+        .upw-submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* ===== Mobile/Tablet Responsive ===== */
+        @media (max-width: 768px) {
+            .upw-wizard-container {
+                padding: 10px;
+                min-height: calc(100vh - 100px);
+            }
+
+            .upw-wizard-card {
+                flex-direction: column;
+                height: auto;
+                min-height: 500px;
+            }
+
+            .upw-menu-toggle-btn {
+                display: flex;
+            }
+
+            .upw-sidebar {
+                position: absolute;
+                left: -280px;
+                top: 0;
+                z-index: 100;
+                min-height: 100%;
+                box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .upw-sidebar.open {
+                left: 0;
+            }
+
+            .upw-close-sidebar-btn {
+                display: block;
+            }
+
+            .upw-content-area {
+                padding: 70px 20px 30px 20px;
+            }
+
+            .upw-form-title {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+
+            .upw-nav-buttons {
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 10px;
+            }
+
+            .upw-nav-arrow {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .upw-wizard-container {
+                padding: 5px;
+            }
+
+            .upw-content-area {
+                padding: 60px 15px 20px 15px;
+            }
+
+            .upw-form-title {
+                font-size: 1rem;
+            }
+
+            .upw-input-group input {
+                padding: 12px 15px;
+                font-size: 0.85rem;
+            }
+
+            .upw-submit-btn {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            .upw-sidebar {
+                width: 260px;
+                padding: 25px 20px;
+            }
+        }
+    </style>
+
+
+    <div class="upw-wizard-container">
+
+
+        <div class="upw-wizard-card">
+            <div class="upw-sidebar-overlay" id="upw-sidebar-overlay"></div>
+
+            <div class="upw-sidebar" id="upw-sidebar">
+                <button type="button" class="upw-close-sidebar-btn" id="upw-close-sidebar-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                     </svg>
-                    Edit Photo
-                </label>
-            </div>
-
-            <div class="step-item active" data-step="1">
-                <span class="step-circle"></span>
-                <span class="step-text">User Profile</span>
-            </div>
-            <div class="step-item" data-step="2">
-                <span class="step-circle"></span>
-                <span class="step-text">Personal Details</span>
-            </div>
-            <div class="step-item" data-step="3">
-                <span class="step-circle"></span>
-                <span class="step-text">Contact Info</span>
-            </div>
-            <div class="step-item" data-step="4">
-                <span class="step-circle"></span>
-                <span class="step-text">Social Profiles</span>
-            </div>
-        </div>
-
-        <!-- Content Area -->
-        <div class="content-area">
-            <h2 class="form-title" id="step-title">User Profile</h2>
-
-            <form id="wizard-form" class="wizard-form" onsubmit="handleFormSubmit(event)">
-                <!-- Step 1: User Profile -->
-                <div class="form-step active" data-step="1">
-                    <div class="input-group">
-                        <input type="email" id="email" placeholder="User Name">
-                    </div>
-                   
-                    <div class="input-group">
-                        <input type="password" id="password" class="password-field" placeholder="Password" minlength="6">
-                        <span id="password-eye" class="toggle-password" onclick="togglePasswordVisibility('password', this)">
-                            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </span>
-                    </div>
-                    <div class="input-group">
-                        <input type="password" id="confirm-password" class="password-field" placeholder="Confirm password">
-                        <span id="confirm-password-eye" class="toggle-password" onclick="togglePasswordVisibility('confirm-password', this)">
-                            <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Step 2: Personal Details -->
-                <div class="form-step" data-step="2">
-                    
-                    <div class="input-group">
-                        <input type="text" placeholder="First Name">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" placeholder="Last Name">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" placeholder="Email (optional)">
-                    </div>
-                    <div class="input-group">
-                        <input type="email" id="alt-email" placeholder="Alternative email (optional)">
-                    </div>
-                </div>
-
-                <!-- Step 3: Contact Info -->
-                <div class="form-step" data-step="3">
-                    <div class="input-group">
-                        <input type="tel" placeholder="Whatsapp Number">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" placeholder="Address (opetional)">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" placeholder="City">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" placeholder="State/Province">
-                    </div>
-                    <div class="input-group">
-                        <input type="text" placeholder="Country">
-                    </div>
-                </div>
-
-                <!-- Step 4: Social Profiles -->
-                <div class="form-step" data-step="4">
-                    <div class="input-group">
-                        <input type="url" placeholder="LinkedIn Profile URL (opetional)">
-                    </div>
-                    <div class="input-group">
-                        <input type="url" placeholder="Instagram Profile URL(opetional)">
-                    </div>
-                    <div class="input-group">
-                        <input type="url" placeholder="Twitter Profile URL (opetional)">
-                    </div>
-                    <div class="input-group">
-                        <input type="url" placeholder="Facebook Profile URL (opetional)">
-                    </div>
-                    
-                    <div class="submit-container">
-                        <button type="submit" class="submit-btn">Complete Registration</button>
-                    </div>
-                </div>
-            </form>
-
-            <!-- Navigation Buttons -->
-            <div class="nav-buttons">
-                <button type="button" class="nav-arrow" id="prev-btn" disabled>
-                    <span>←</span> Previous
                 </button>
-                <button type="button" class="nav-arrow" id="next-btn">
-                    Next <span>→</span>
-                </button>
+
+                <div class="upw-sidebar-logo-container">
+                    <div class="upw-sidebar-logo" id="upw-sidebar-avatar-preview">
+                        <img src="{{ $user->getAvatarAttribute() ?? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200' }}"
+                            alt="Avatar" id="upw-sidebar-avatar-img">
+                    </div>
+                </div>
+
+                <div class="upw-step-item active" data-step="1">
+                    <span class="upw-step-circle"></span>
+                    <span class="upw-step-text">Personal Details</span>
+                </div>
+                <div class="upw-step-item" data-step="2">
+                    <span class="upw-step-circle"></span>
+                    <span class="upw-step-text">Contact Info</span>
+                </div>
+                <div class="upw-step-item" data-step="3">
+                    <span class="upw-step-circle"></span>
+                    <span class="upw-step-text">Social Profiles</span>
+                </div>
+            </div>
+
+            <div class="upw-content-area">
+                <h2 class="upw-form-title" id="upw-step-title">Personal Details</h2>
+                @if(session('success'))
+                    <div id="success-alert" class="alert alert-success alert-dismissible fade show mb-3">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div id="error-alert" class="alert alert-danger alert-dismissible fade show mb-3">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                <form id="upw-wizard-form" class="upw-wizard-form" action="{{ route('pages.userprofile.update') }}"
+                    method="POST" enctype="multipart/form-data">
+                    @csrf
+
+                    <div class="upw-input-group">
+                        <label for="upw-main-image-input">Profile Image (optional)</label>
+                        <input type="file" id="upw-main-image-input" name="image" accept="image/*">
+                    </div>
+
+                    <div class="upw-form-step active" data-step="1">
+                        <div class="upw-input-group">
+                            <label for="upw-username">Username</label>
+                            <input type="text" id="upw-username" name="user_name" class="upw-action-padding"
+                                value="{{ $user->user_name }}" readonly>
+
+                            <div class="upw-input-actions">
+                                <span class="upw-copy-toast" id="upw-username-toast">Copied!</span>
+                                <button type="button" class="upw-action-icon-btn"
+                                    onclick="upwCopyField('upw-username', 'upw-username-toast')" title="Copy Username">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.309V19.5L18 19.5c.621 0 1.125-.504 1.125-1.125V8.118M6.75 7.309L15 2.25m-8.25 5.059H15" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-password">Password</label>
+                            <input type="password" id="upw-password" class="upw-action-padding"
+                                value="{{ $user->password }}" readonly>
+
+                            <div class="upw-input-actions">
+                                <span class="upw-copy-toast" id="upw-password-toast">Copied!</span>
+
+                                <button type="button" class="upw-action-icon-btn"
+                                    onclick="upwCopyField('upw-password', 'upw-password-toast')" title="Copy Password">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H5.25m11.9-3.664A2.251 2.251 0 0015 2.25h-1.5a2.251 2.251 0 00-2.15 1.586m5.8 0c.065.21.1.433.1.664v.75h-6V4.5c0-.231.035-.454.1-.664M6.75 7.309V19.5L18 19.5c.621 0 1.125-.504 1.125-1.125V8.118M6.75 7.309L15 2.25m-8.25 5.059H15" />
+                                    </svg>
+                                </button>
+
+                                <button type="button" class="upw-action-icon-btn" id="upw-toggle-pwd-btn"
+                                    title="Toggle Visibility">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" id="upw-eye-svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-full_name">Full Name</label>
+                            <input type="text" id="upw-full_name" name="full_name" placeholder="Enter your full name"
+                                value="{{ old('full_name', $user->name) }}" required>
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-email">Email</label>
+                            <input type="email" id="upw-email" name="email" placeholder="Enter your email address"
+                                value="{{ old('email', $user->email) }}">
+                        </div>
+                    </div>
+
+                    <div class="upw-form-step" data-step="2">
+                        <div class="upw-input-group">
+                            <label for="upw-whatsapp_num">Whatsapp Number</label>
+                            <input type="tel" id="upw-whatsapp_num" name="whatsapp_number"
+                                placeholder="Enter Whatsapp Number"
+                                value="{{ old('whatsapp_number', $user->whatsapp_number) }}" required>
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-address">Address (optional)</label>
+                            <input type="text" id="upw-address" name="address" placeholder="Enter your address"
+                                value="{{ old('address', $user->address) }}">
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-city">City</label>
+                            <input type="text" id="upw-city" name="city" placeholder="Enter your city"
+                                value="{{ old('city', $user->city) }}">
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-state">State/Province</label>
+                            <input type="text" id="upw-state" name="state" placeholder="Enter your state or province"
+                                value="{{ old('state', $user->state) }}">
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-country">Country</label>
+                            <input type="text" id="upw-country" name="country" placeholder="Enter your country"
+                                value="{{ old('country', $user->country) }}">
+                        </div>
+                    </div>
+
+                    <div class="upw-form-step" data-step="3">
+                        <div class="upw-input-group">
+                            <label for="upw-linkedin_url">LinkedIn Profile URL (optional)</label>
+                            <input type="url" id="upw-linkedin_url" name="linkedin_url"
+                                placeholder="https://linkedin.com/in/username"
+                                value="{{ old('linkedin_url', $user->linkedin_url) }}">
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-instagram_url">Instagram Profile URL (optional)</label>
+                            <input type="url" id="upw-instagram_url" name="instagram_url"
+                                placeholder="https://instagram.com/username"
+                                value="{{ old('instagram_url', $user->instagram_url) }}">
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-twitter_url">Twitter Profile URL (optional)</label>
+                            <input type="url" id="upw-twitter_url" name="twitter_url"
+                                placeholder="https://twitter.com/username"
+                                value="{{ old('twitter_url', $user->twitter_url) }}">
+                        </div>
+
+                        <div class="upw-input-group">
+                            <label for="upw-facebook_url">Facebook Profile URL (optional)</label>
+                            <input type="url" id="upw-facebook_url" name="facebook_url"
+                                placeholder="https://facebook.com/username"
+                                value="{{ old('facebook_url', $user->facebook_url) }}">
+                        </div>
+
+                        <!-- <div class="upw-submit-container">
+                            <button type="submit" class="upw-submit-btn">Update Profile</button>
+                        </div> -->
+                    </div>
+                </form>
+
+                <div class="upw-nav-buttons">
+                    <button type="button" class="upw-nav-arrow" id="upw-prev-btn" disabled>
+                        <span>←</span> Previous
+                    </button>
+
+                    <button type="button" class="upw-nav-arrow" id="upw-next-btn">
+                        Next <span>→</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    const steps = document.querySelectorAll('.form-step');
-    const stepIndicators = document.querySelectorAll('.step-item');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const stepTitle = document.getElementById('step-title');
+    <script>
+        (function () {
+            'use strict';
 
-    // Sidebar elements
-    const sidebar = document.getElementById('sidebar');
-    const menuBtn = document.getElementById('menu-btn');
-    const closeSidebarBtn = document.getElementById('close-sidebar-btn');
-    const sidebarOverlay = document.getElementById('sidebar-overlay');
+            // Cache DOM elements
+            const steps = document.querySelectorAll('.upw-form-step');
+            const stepIndicators = document.querySelectorAll('.upw-step-item');
+            const prevBtn = document.getElementById('upw-prev-btn');
+            const nextBtn = document.getElementById('upw-next-btn');
+            const stepTitle = document.getElementById('upw-step-title');
 
-    let currentStep = 1;
-    const totalSteps = steps.length;
+            let currentStep = 1;
+            const totalSteps = steps.length;
 
-    // --- Sidebar Drawer Open/Close logic ---
-    function openSidebar() {
-        sidebar.classList.add('open');
-        sidebarOverlay.classList.add('active');
-    }
+            // 1. Bulletproof Copy Function
+            window.upwCopyField = function (fieldId, toastId) {
+                const inputField = document.getElementById(fieldId);
+                if (!inputField) return;
 
-    function closeSidebar() {
-        sidebar.classList.remove('open');
-        sidebarOverlay.classList.remove('active');
-    }
+                const originalType = inputField.type;
 
-    menuBtn.addEventListener('click', openSidebar);
-    closeSidebarBtn.addEventListener('click', closeSidebar);
-    sidebarOverlay.addEventListener('click', closeSidebar);
+                // Momentarily change type to text to bypass password mask copy bans
+                inputField.type = 'text';
+                inputField.select();
+                inputField.setSelectionRange(0, 99999);
 
-    // ----------------- Password Show/Hide Feature -----------------
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirm-password');
-    const passwordEye = document.getElementById('password-eye');
-    const confirmPasswordEye = document.getElementById('confirm-password-eye');
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        showSuccessToast(toastId);
+                    } else {
+                        navigator.clipboard.writeText(inputField.value).then(() => {
+                            showSuccessToast(toastId);
+                        });
+                    }
+                } catch (err) {
+                    navigator.clipboard.writeText(inputField.value).then(() => {
+                        showSuccessToast(toastId);
+                    }).catch(e => console.error('Failed to copy: ', e));
+                }
 
-    passwordInput.addEventListener('input', function() {
-        if (this.value.trim().length > 0) {
-            passwordEye.classList.add('visible');
-        } else {
-            passwordEye.classList.remove('visible');
-        }
-    });
+                inputField.type = originalType;
+                inputField.blur();
+            };
 
-    confirmPasswordInput.addEventListener('input', function() {
-        if (this.value.trim().length > 0) {
-            confirmPasswordEye.classList.add('visible');
-        } else {
-            confirmPasswordEye.classList.remove('visible');
-        }
-    });
-
-    function togglePasswordVisibility(fieldId, iconElement) {
-        const passwordField = document.getElementById(fieldId);
-        
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            iconElement.innerHTML = `
-                <svg class="eye-closed" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                </svg>
-            `;
-        } else {
-            passwordField.type = "password";
-            iconElement.innerHTML = `
-                <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-            `;
-        }
-    }
-
-    // REMOVED: validateCurrentStep function - No validation required for navigation
-
-    // Enter key navigation - Now without validation
-    document.querySelectorAll('.wizard-form input').forEach(input => {
-        input.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                
-                if (currentStep < totalSteps) {
-                    currentStep++;
-                    updateWizard(currentStep);
-                    
-                    setTimeout(() => {
-                        const nextFormStep = document.querySelector(`.form-step[data-step="${currentStep}"]`);
-                        const firstInput = nextFormStep.querySelector('input');
-                        if (firstInput) firstInput.focus();
-                    }, 100);
-                } else if (currentStep === totalSteps) {
-                    handleFormSubmit(event);
+            function showSuccessToast(toastId) {
+                const toast = document.getElementById(toastId);
+                if (toast) {
+                    toast.classList.add('show');
+                    setTimeout(() => toast.classList.remove('show'), 1500);
                 }
             }
-        });
-    });
 
-    function updateWizard(step) {
-        // Update form steps
-        steps.forEach(s => s.classList.remove('active'));
-        const activeFormStep = document.querySelector(`.form-step[data-step="${step}"]`);
-        if(activeFormStep) activeFormStep.classList.add('active');
+            // 2. Interactive Eye / Show Hide Password Toggle
+            const passwordInput = document.getElementById('upw-password');
+            const togglePwdBtn = document.getElementById('upw-toggle-pwd-btn');
+            const eyeSvg = document.getElementById('upw-eye-svg');
 
-        // Update sidebar indicators
-        stepIndicators.forEach(indicator => {
-            const indicatorStep = parseInt(indicator.getAttribute('data-step'));
-            if (indicatorStep === step) {
-                indicator.classList.add('active');
-            } else {
-                indicator.classList.remove('active');
+            if (togglePwdBtn && passwordInput) {
+                togglePwdBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        if (eyeSvg) {
+                            eyeSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />`;
+                        }
+                    } else {
+                        passwordInput.type = 'password';
+                        if (eyeSvg) {
+                            eyeSvg.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />`;
+                        }
+                    }
+                });
             }
-        });
 
-        // Update title
-        const activeTextElement = document.querySelector(`.step-item[data-step="${step}"] .step-text`);
-        if(activeTextElement) stepTitle.textContent = activeTextElement.textContent;
+            // 3. Navigation Drawer Sidebar for Mobile Devices
+            const sidebar = document.getElementById('upw-sidebar');
+            const menuBtn = document.getElementById('upw-menu-btn');
+            const closeSidebarBtn = document.getElementById('upw-close-sidebar-btn');
+            const sidebarOverlay = document.getElementById('upw-sidebar-overlay');
 
-        // Update navigation buttons
-        prevBtn.disabled = (step === 1);
-        nextBtn.disabled = (step === totalSteps);
-        
-        // Update next button text for last step
-        if (step === totalSteps) {
-            nextBtn.innerHTML = 'Submit <span>✓</span>';
-        } else {
-            nextBtn.innerHTML = 'Next <span>→</span>';
-        }
-
-        // Close sidebar on mobile
-        if (window.innerWidth <= 768) {
-            closeSidebar();
-        }
-    }
-
-    // Navigation button clicks - Now without validation
-    nextBtn.addEventListener('click', () => {
-        if (currentStep === totalSteps) {
-            // Submit the form
-            handleFormSubmit(new Event('submit'));
-        } else if (currentStep < totalSteps) {
-            currentStep++;
-            updateWizard(currentStep);
-        }
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (currentStep > 1) {
-            currentStep--;
-            updateWizard(currentStep);
-        }
-    });
-
-    // Sidebar step clicks - Now without validation
-    stepIndicators.forEach(indicator => {
-        indicator.addEventListener('click', () => {
-            const targetStep = parseInt(indicator.getAttribute('data-step'));
-            currentStep = targetStep;
-            updateWizard(currentStep);
-        });
-    });
-
-    // ----------------- Profile Image Syncing -----------------
-    const avatarInput = document.getElementById('avatar-input');
-    const sidebarAvatarInput = document.getElementById('sidebar-avatar-input');
-    const avatarContainer = document.getElementById('avatar-container');
-    const sidebarAvatarImg = document.getElementById('sidebar-avatar-img');
-
-    function updateAvatarPreview(file) {
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                avatarContainer.innerHTML = `<img src="${e.target.result}" alt="Avatar Preview">`;
-                sidebarAvatarImg.src = e.target.result;
+            function openSidebar() {
+                if (sidebar) sidebar.classList.add('open');
+                if (sidebarOverlay) sidebarOverlay.classList.add('active');
             }
-            reader.readAsDataURL(file);
-        }
-    }
 
-    avatarInput.addEventListener('change', function() {
-        updateAvatarPreview(this.files[0]);
-    });
+            function closeSidebar() {
+                if (sidebar) sidebar.classList.remove('open');
+                if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+            }
 
-    sidebarAvatarInput.addEventListener('change', function() {
-        updateAvatarPreview(this.files[0]);
-    });
+            if (menuBtn) menuBtn.addEventListener('click', openSidebar);
+            if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+            if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
-    // Form submit handler
-    function handleFormSubmit(event) {
-        event.preventDefault();
-        alert("Registration Completed successfully!");
-        // You can submit the form here via AJAX or regular form submission
-    }
-</script>
+            // 4. Multi-step Form Wizard Handling
+            function updateWizard(step) {
+                steps.forEach(s => s.classList.remove('active'));
+                const targetStep = document.querySelector(`.upw-form-step[data-step="${step}"]`);
+                if (targetStep) targetStep.classList.add('active');
 
+                stepIndicators.forEach(ind => {
+                    ind.classList.toggle('active', parseInt(ind.getAttribute('data-step')) === step);
+                });
+
+                const activeText = document.querySelector(`.upw-step-item[data-step="${step}"] .upw-step-text`);
+                if (activeText && stepTitle) {
+                    stepTitle.textContent = activeText.textContent;
+                }
+
+                if (prevBtn) prevBtn.disabled = (step === 1);
+                if (nextBtn) {
+                    nextBtn.innerHTML = (step === totalSteps) ? 'Done <span>&check;</span>' : 'Next <span>→</span>';
+                }
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function () {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        updateWizard(currentStep);
+                    } else {
+                        document.getElementById('upw-wizard-form').submit();
+                    }
+                });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function () {
+                    if (currentStep > 1) {
+                        currentStep--;
+                        updateWizard(currentStep);
+                    }
+                });
+            }
+
+            stepIndicators.forEach(indicator => {
+                indicator.addEventListener('click', function () {
+                    currentStep = parseInt(this.getAttribute('data-step'));
+                    updateWizard(currentStep);
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+            // 5. Instantly Preview Uploaded Avatar
+            const mainImageInput = document.getElementById('upw-main-image-input');
+            const sidebarAvatarImg = document.getElementById('upw-sidebar-avatar-img');
+
+            if (mainImageInput && sidebarAvatarImg) {
+                mainImageInput.addEventListener('change', function () {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            sidebarAvatarImg.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // Initializer
+            updateWizard(1);
+
+            // Auto-hide alerts after 3 seconds
+            const successAlert = document.getElementById('success-alert');
+            if (successAlert) {
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 3000);
+            }
+
+            const errorAlert = document.getElementById('error-alert');
+            if (errorAlert) {
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 3000);
+            }
+
+        })();
+    </script>
 @endsection
