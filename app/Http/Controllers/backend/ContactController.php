@@ -26,4 +26,27 @@ class ContactController extends Controller
 
         return back()->with('success', 'Message sent successfully!');
     }
+
+
+    // ...store() stays exactly as it was...
+
+    /**
+     * Show all contact messages to the admin, newest first.
+     */
+    public function index()
+    {
+        $contacts = Contact::latest()->get();
+
+        return view('admin.pages.contact.index', compact('contacts'));
+    }
+
+    /**
+     * Delete a single contact message.
+     */
+    public function destroy(Contact $contact)
+    {
+        $contact->delete();
+
+        return back()->with('success', 'Message deleted successfully.');
+    }
 }

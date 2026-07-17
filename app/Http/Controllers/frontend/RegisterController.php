@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers\frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserAccount;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+// Remove: use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
@@ -20,7 +20,7 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        // Validate the incoming request
+        // Validate the incoming request including all contact and social fields
         $request->validate([
             'user_name' => 'required|string|exists:user_accounts,user_account',
             'password' => 'required|string|min:8',
@@ -28,6 +28,17 @@ class RegisterController extends Controller
             'whatsapp' => 'required|string|max:20',
             'city' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255|unique:users,email',
+
+            // --- CONTACT INFO FIELDS ---
+            'address' => 'nullable|string|max:500',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+
+            // --- SOCIAL PROFILES FIELDS ---
+            'linkedin_url' => 'nullable|url|max:255',
+            'instagram_url' => 'nullable|url|max:255',
+            'twitter_url' => 'nullable|url|max:255',
+            'facebook_url' => 'nullable|url|max:255',
         ]);
 
         try {
@@ -51,21 +62,47 @@ class RegisterController extends Controller
                     'email' => $request->email,
                     'whatsapp_number' => $request->whatsapp,
                     'city' => $request->city,
-                    'password' => Hash::make($request->password),
+
+                    // --- CONTACT INFO FIELDS ---
+                    'address' => $request->address,
+                    'state' => $request->state,
+                    'country' => $request->country,
+
+                    // --- SOCIAL PROFILES FIELDS ---
+                    'linkedin_url' => $request->linkedin_url,
+                    'instagram_url' => $request->instagram_url,
+                    'twitter_url' => $request->twitter_url,
+                    'facebook_url' => $request->facebook_url,
+
+                    // STORE PASSWORD IN PLAIN TEXT (NO HASH)
+                    'password' => $request->password,
                     'register_account' => 1,
                     'unregister_account' => 0,
                 ]);
 
                 $user = $existingUser;
             } else {
-                // Create new user in users table with encrypted password
+                // Create new user in users table with PLAIN TEXT password
                 $user = User::create([
                     'user_name' => $request->user_name,
                     'name' => $request->full_name,
                     'email' => $request->email,
-                    'password' => Hash::make($request->password),
+                    // STORE PASSWORD IN PLAIN TEXT (NO HASH)
+                    'password' => $request->password,
                     'whatsapp_number' => $request->whatsapp,
                     'city' => $request->city,
+
+                    // --- CONTACT INFO FIELDS ---
+                    'address' => $request->address,
+                    'state' => $request->state,
+                    'country' => $request->country,
+
+                    // --- SOCIAL PROFILES FIELDS ---
+                    'linkedin_url' => $request->linkedin_url,
+                    'instagram_url' => $request->instagram_url,
+                    'twitter_url' => $request->twitter_url,
+                    'facebook_url' => $request->facebook_url,
+
                     'register_account' => 1,
                     'unregister_account' => 0,
                 ]);
@@ -105,23 +142,68 @@ class RegisterController extends Controller
 
     public function updateProfile(Request $request)
     {
-        $request->validate([
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-
         $user = Auth::user();
 
+        if (!$user) {
+            return redirect()->route('auth.auth')->with('error', 'Please login first.');
+        }
+
+        // Validation Rules
+        $request->validate([
+            'full_name' => 'required|string|max:255',
+            'email' => 'nullable|email|max:255|unique:users,email,' . $user->id,
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'whatsapp_number' => 'required|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'city' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'instagram_url' => 'nullable|url|max:255',
+            'twitter_url' => 'nullable|url|max:255',
+            'facebook_url' => 'nullable|url|max:255',
+            // Password validation - only if password fields are filled
+            'current_password' => 'nullable|string|required_with:new_password',
+            'new_password' => 'nullable|string|min:8|confirmed|required_with:current_password',
+        ]);
+
+        // Update profile information
+        $user->name = $request->full_name;
+        $user->email = $request->email;
+        $user->whatsapp_number = $request->whatsapp_number;
+        $user->address = $request->address;
+        $user->city = $request->city;
+        $user->state = $request->state;
+        $user->country = $request->country;
+        $user->linkedin_url = $request->linkedin_url;
+        $user->instagram_url = $request->instagram_url;
+        $user->twitter_url = $request->twitter_url;
+        $user->facebook_url = $request->facebook_url;
+
+        // Image Upload in public/users
         if ($request->hasFile('image')) {
-            // Delete old image if exists
-            if ($user->image && file_exists(storage_path('app/public/' . $user->image))) {
-                unlink(storage_path('app/public/' . $user->image));
+            if ($user->image && file_exists(public_path('users/' . $user->image))) {
+                @unlink(public_path('users/' . $user->image));
             }
 
-            // Store new image
-            $path = $request->file('image')->store('profile_images', 'public');
-            $user->image = $path;
-            $user->save();
+            $file = $request->file('image');
+            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('users'), $filename);
+            $user->image = $filename;
         }
+
+        // Update password if provided
+        if ($request->filled('current_password') && $request->filled('new_password')) {
+            // Check if current password matches (plain text comparison)
+            if ($user->password !== $request->current_password) {
+                return back()->with('error', 'Current password is incorrect.');
+            }
+
+            // Store new password in plain text
+            $user->password = $request->new_password;
+        }
+
+        $user->save();
 
         return back()->with('success', 'Profile updated successfully!');
     }
@@ -136,7 +218,8 @@ class RegisterController extends Controller
         // Find user by username
         $user = User::where('user_name', $request->user_name)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        // DIRECT PLAIN TEXT COMPARISON (NO HASH)
+        if (!$user || $user->password !== $request->password) {
             return redirect()
                 ->back()
                 ->withInput()
@@ -173,10 +256,54 @@ class RegisterController extends Controller
     }
 
     public function showLoginForm()
-{
-    // Fetch users from your model
-    $availableUsers = \App\Models\User::all(); // Or whatever model you use
-    
-    return view('auth.auth', compact('availableUsers'));
-}
+    {
+        $availableUsers = \App\Models\User::all();
+        return view('auth.auth', compact('availableUsers'));
+    }
+
+
+    public function showProfile()
+    {
+        $user = Auth::user();
+        return view('admin.pages.profile.index', compact('user'));
+    }
+
+    // public function updateProfile(Request $request)
+    // {
+    //     $user = Auth::user();
+
+    //     $request->validate([
+    //         'name' => 'required|string|max:255',
+    //         'email' => 'required|email|unique:users,email,' . $user->id,
+    //         'whatsapp_number' => 'nullable|string|max:20',
+    //     ]);
+
+    //     $user->name = $request->name;
+    //     $user->email = $request->email;
+    //     $user->whatsapp_number = $request->whatsapp_number;
+    //     $user->save();
+
+    //     return back()->with('success', 'Profile updated successfully!');
+    // }
+
+    public function updatePassword(Request $request)
+    {
+        $user = Auth::user();
+
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Since you store passwords in plain text, compare directly
+        if ($user->password !== $request->current_password) {
+            return back()->with('error', 'Current password is incorrect.');
+        }
+
+        // Store new password in plain text
+        $user->password = $request->new_password;
+        $user->save();
+
+        return back()->with('success', 'Password updated successfully!');
+    }
 }

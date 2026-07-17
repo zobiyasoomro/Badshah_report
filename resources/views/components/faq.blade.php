@@ -10,26 +10,26 @@
       --cream-dim: rgba(242, 238, 233, 0.7);
       --gold: #25D1E0;
       --accent-cyan: #25D1E0;      /* for open answer */
-      --shadow-glow: 0 20px 40px -12px rgba(0,0,0,0.5);
+      --shadow-glow: 0 20px 40px -12px rgba(75, 189, 189, 0.5);
     }
 
    
     /* ===== FAQ SECTION – refined, spacious, elegant ===== */
     .faq-section {
       background: var(--navy-deep);
-      padding: 50px 0;
-      border-radius: 48px;
+      padding: 10px 0;
+      /* border-radius: 48px; */
       box-shadow: var(--shadow-glow);
       margin: 0 auto;
       width: 100%;
-      max-width: 1200px;
+      /* max-width: 1200px; */
       transition: all 0.2s;
     }
 
     .faq-section .wrap {
-      max-width: 900px;
+      max-width: 90%;
       margin: 0 auto;
-      padding: 0 32px;
+      /* padding: 0 32px; */
     }
 
     /* --- header --- */
@@ -181,13 +181,13 @@
 
     /* ===== responsive ===== */
     @media (max-width: 1024px) {
-      .faq-section { padding: 60px 0; border-radius: 32px; }
+      .faq-section { padding: 20px 0;  }
       .faq-heading { font-size: 44px; }
     }
 
     @media (max-width: 768px) {
       body { padding: 1rem 0; }
-      .faq-section { padding: 44px 0; border-radius: 24px; }
+      .faq-section { padding: 20px 0;  }
       .faq-section .wrap { padding: 0 20px; }
       .sec-head { margin-bottom: 40px; }
       .faq-heading { font-size: 34px; }
@@ -198,7 +198,7 @@
     }
 
     @media (max-width: 480px) {
-      .faq-section { padding: 28px 0; border-radius: 16px; }
+      .faq-section { padding: 20px 0; }
       .faq-section .wrap { padding: 0 14px; }
       .faq-heading { font-size: 26px; }
       .host-label { font-size: 11px; padding: 5px 14px; }
@@ -222,9 +222,9 @@
   </style>
 
 
-<div class="container-fluid px-0">
+<div class="container-fluid px-0" style="background-color: #ffff;">
   <div class="row justify-content-center">
-    <div class="col-12 col-xl-10 col-xxl-9">
+    <div class="col-12 col-xl-10 col-xxl-12">
 
       <!-- FAQ section – with your color theme & bootstrap grid -->
       <section class="faq-section">
@@ -302,7 +302,7 @@
           </div> <!-- /faq-list -->
 
           <!-- subtle extra hint (design detail) -->
-          <div class="text-center mt-5 pt-2">
+          <div class="text-center mt-2">
             <span style="color: rgb(255, 255, 255); font-size: 13px; letter-spacing: 1px;">
               <i class="fas fa-gem me-1" style="color: var(--gold); "></i> 
               premium support · 24/7

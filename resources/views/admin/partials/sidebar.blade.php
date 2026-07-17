@@ -28,7 +28,6 @@
                     </a>
                 </li>
                 <li>
-                    <!-- ✅ ADDED: href="{{ route('admin.about') }}" -->
                     <a href="{{ route('admin.about') }}"
                         class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.about') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
                         <i class="fa-solid fa-info-circle w-5"></i>
@@ -43,8 +42,16 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('admin.blog') }}"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.blog') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
+                    <a href="{{ route('admin.user') }}"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.user') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
+                        <i class="fa-solid fa-users w-5"></i>   
+                        Users
+                    </a>
+                </li>
+                <li>
+                    <!-- FIXED: Changed from 'admin.blog' to 'admin.blog.index' -->
+                    <a href="{{ route('admin.blog.index') }}"
+                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all {{ request()->routeIs('admin.blog.*') ? 'bg-[#2A4563] text-white shadow-lg shadow-[#2A4563]/20' : 'text-gray-600 hover:bg-gray-100' }}">
                         <i class="fa-solid fa-blog w-5"></i>
                         Blog
                     </a>
@@ -60,7 +67,7 @@
 
             <!-- Bottom Section -->
             <div class="pt-4 mt-4 border-t border-gray-200">
-                <a href="#" target="_blank"
+                <a href="{{ url('/home') }}" target="_blank"
                     class="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition-all">
                     <i class="fa-solid fa-external-link-alt w-5"></i>
                     View Site

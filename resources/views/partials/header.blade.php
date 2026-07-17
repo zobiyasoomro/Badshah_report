@@ -365,8 +365,8 @@
                 aria-expanded="false" style="border: none; background: transparent;">
                 <div class="profile-container">
                     <div class="profile-avatar">
-                        @if(Auth::check() && Auth::user()->image)
-                            <img src="{{ asset('storage/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}"
+                      @if(Auth::check() && Auth::user()->image)
+                            <img src="{{ asset('users/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}"
                                 style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         @else
                             {{ Auth::check() ? Auth::user()->getInitialsAttribute() : 'GU' }}
@@ -392,7 +392,7 @@
 
                 @if(Auth::check())
                     <!-- Show these items only when logged in -->
-                    <li><a class="dropdown-item" href="#" style="font-size: larger;">
+                    <li><a class="dropdown-item" href="{{ route('pages.userprofile') }}" style="font-size: larger;">
                             <i class="fas fa-user-edit me-2"></i> My Account
                         </a></li>
                     <li><a class="dropdown-item" href="#" style="font-size: larger;">

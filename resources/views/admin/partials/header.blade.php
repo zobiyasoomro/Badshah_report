@@ -45,35 +45,43 @@
             <!-- Dropdown Menu -->
             <div id="profileMenu"
                 class="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-2xl shadow-xl py-2 hidden z-50">
-                <div class="px-4 py-2 border-b border-gray-100">
+
+                <!-- User Info -->
+                <div class="px-4 py-3 border-b border-gray-100">
                     <p class="text-sm font-semibold" style="color: #2A4563;">Admin Profile</p>
-                    <p class="text-xs" style="color: #6b7a8d;">admin@example.com</p>
+                    <p class="text-xs" style="color: #6b7a8d;">betproadmin@example.com</p>
                 </div>
 
-                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-all"
+                <!-- Menu Items -->
+                <a href="{{ route('admin.profile') }}"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-all duration-200"
                     style="color: #2A4563;">
-                    <i class="fa-regular fa-user w-5" style="color: #2A4563;"></i> My Profile
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-all"
-                    style="color: #2A4563;">
-                    <i class="fa-regular fa-gear w-5" style="color: #2A4563;"></i> Settings
-                </a>
-                <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-all"
-                    style="color: #2A4563;">
-                    <i class="fa-solid fa-globe w-5" style="color: #2A4563;"></i> View Website
+                    <i class="fa-regular fa-user w-5 text-center" style="color: #2A4563;"></i>
+                    My Profile
                 </a>
 
+                
+
+                <a href="{{ url('/home') }}" target="_blank"
+                    class="flex items-center gap-3 px-4 py-2.5 text-sm hover:bg-gray-50 transition-all duration-200"
+                    style="color: #2A4563;">
+                    <i class="fa-solid fa-globe w-5 text-center" style="color: #2A4563;"></i>
+                    View Website
+                </a>
+
+                <!-- Divider -->
                 <hr class="border-gray-100 my-1">
 
-                <li>
-                    <form action="{{ route('auth.logout') }}" method="POST" style="display: inline;">
-                        @csrf
-                        <button type="submit" class="dropdown-item"
-                            style="font-size: larger; color: #ef5555; background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
-                            <i class="fas fa-sign-out-alt me-2"></i> Log Out
-                        </button>
-                    </form>
-                </li>
+                <!-- Logout -->
+                <form action="{{ route('auth.logout') }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                        class="flex items-center gap-3 px-4 py-2.5 text-sm w-full text-left hover:bg-red-50 transition-all duration-200"
+                        style="color: #dc2626;">
+                        <i class="fas fa-sign-out-alt w-5 text-center" style="color: #dc2626;"></i>
+                        Log Out
+                    </button>
+                </form>
             </div>
         </div>
     </div>

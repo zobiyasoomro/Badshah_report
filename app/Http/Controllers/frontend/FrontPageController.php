@@ -1,25 +1,42 @@
 <?php
 
-namespace App\Http\Controllers\Frontend;
+namespace App\Http\Controllers\frontend;  // <-- lowercase 'frontend'
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\AboutPage;
+use App\Models\Blog;
+use App\Models\Platform;
 
 class FrontPageController extends Controller
 {
     public function home()
     {
-        return view('pages.home');
+        $user = auth()->user();
+        return view('pages.home', compact('user'));
     }
 
     public function about()
     {
-        return view('pages.about');
+        $about = AboutPage::first();
+        if (!$about) {
+            $about = new AboutPage();
+        }
+        return view('pages.about', compact('about'));
     }
 
     public function platforms()
     {
-        return view('pages.platforms');
+        try {
+            \Log::info('Platforms method called');
+            $platforms = Platform::where('status', 1)->orderBy('id')->get();
+            \Log::info('Platforms found: ' . $platforms->count());
+            return view('pages.platforms', compact('platforms'));
+        } catch (\Exception $e) {
+            \Log::error('Platforms error: ' . $e->getMessage());
+            $platforms = collect([]);
+            return view('pages.platforms', compact('platforms'));
+        }
     }
 
     public function planes()
@@ -29,7 +46,8 @@ class FrontPageController extends Controller
 
     public function blog()
     {
-        return view('pages.blog');
+        $blogs = Blog::all();
+        return view('pages.blog', compact('blogs'));
     }
 
     public function contact()
@@ -37,17 +55,12 @@ class FrontPageController extends Controller
         return view('pages.contact');
     }
 
-    // User Profile Method
     public function userProfile()
     {
-        // Get authenticated user
         $user = auth()->user();
-        
-        // If no user is logged in, redirect to login
         if (!$user) {
-            return redirect()->route('auth.login.page');
+            return redirect()->route('auth.auth')->with('error', 'Please login to view your profile.');
         }
-        
         return view('pages.userprofile', compact('user'));
     }
 }
