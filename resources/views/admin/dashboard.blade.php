@@ -1,120 +1,422 @@
 @extends('admin.layouts.master')
 @section('title', 'Dashboard')
 @section('admin_content')
-<div class="mb-8">
-    <h1 class="text-2xl font-bold text-[#2A4563] tracking-tight">Admin Dashboard</h1>
-    <p class="text-sm text-gray-400 mt-0.5">Central overview of your platform's performance metrics context profile.</p>
+
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col">
+            <h1 class="h2 fw-bold text-dark mb-1">
+                <i class="fas fa-chart-pie text-primary me-2"></i>Admin Dashboard
+            </h1>
+            <p class="text-muted small mt-1">Central overview of your platform's performance metrics.</p>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row 1 -->
+    <div class="row g-4 mb-4">
+        <!-- Withdraw Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-uppercase fw-bold text-muted small mb-1">Withdraw</p>
+                            <h3 class="fw-bold text-dark mb-0">Rs. {{ number_format($withdrawTotal, 2) }}</h3>
+                        </div>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center" 
+                             style="width: 48px; height: 48px; background: rgba(16, 185, 129, 0.1);">
+                            <i class="fas fa-wallet text-success fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deposit Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-uppercase fw-bold text-muted small mb-1">Deposit</p>
+                            <h3 class="fw-bold text-dark mb-0">Rs. {{ number_format($depositTotal, 2) }}</h3>
+                        </div>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center" 
+                             style="width: 48px; height: 48px; background: rgba(245, 158, 11, 0.1);">
+                            <i class="fas fa-chart-line text-warning fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-uppercase fw-bold text-muted small mb-1">Orders</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ $ordersCount }}</h3>
+                        </div>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center" 
+                             style="width: 48px; height: 48px; background: rgba(59, 130, 246, 0.1);">
+                            <i class="fas fa-box-open text-primary fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews Card -->
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-uppercase fw-bold text-muted small mb-1">Reviews</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ $reviewsCount }}</h3>
+                        </div>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center" 
+                             style="width: 48px; height: 48px; background: rgba(139, 92, 246, 0.1);">
+                            <i class="fas fa-star text-purple-500 fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards Row 2 -->
+    <div class="row g-4 mb-4">
+        <!-- Contacts Card -->
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-uppercase fw-bold text-muted small mb-1">Contacts</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ $contactsCount }}</h3>
+                        </div>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center" 
+                             style="width: 48px; height: 48px; background: rgba(236, 72, 153, 0.1);">
+                            <i class="fas fa-envelope text-pink-500 fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unregistered Accounts Card -->
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-uppercase fw-bold text-muted small mb-1">Unregistered Accounts</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ $unregisteredAccountsCount }}</h3>
+                        </div>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center" 
+                             style="width: 48px; height: 48px; background: rgba(14, 165, 233, 0.1);">
+                            <i class="fas fa-user-slash text-info fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Card -->
+        <div class="col-12 col-sm-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <p class="text-uppercase fw-bold text-muted small mb-1">Users</p>
+                            <h3 class="fw-bold text-dark mb-0">{{ $usersCount }}</h3>
+                        </div>
+                        <div class="rounded-3 d-flex align-items-center justify-content-center" 
+                             style="width: 48px; height: 48px; background: rgba(249, 115, 22, 0.1);">
+                            <i class="fas fa-users text-orange-500 fs-4"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1 -->
+    <div class="row g-4 mb-4">
+        <!-- Sign-up Chart -->
+        <div class="col-12 col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold text-dark">User Sign-ups (Last 30 Days)</h6>
+                        <span class="badge bg-light text-muted rounded-pill px-3 py-2 small fw-normal">
+                            <i class="fas fa-circle text-primary me-1" style="font-size: 0.5rem;"></i> Live Active
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div style="height: 260px;">
+                        <canvas id="signupChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orders Doughnut Chart -->
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold text-dark">Orders by Plane</h6>
+                        <span class="badge bg-light text-muted rounded-pill px-3 py-2 small fw-normal">
+                            <i class="fas fa-circle text-primary me-1" style="font-size: 0.5rem;"></i> Popularity
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body p-4 d-flex align-items-center justify-content-center">
+                    <div style="height: 240px; width: 100%;">
+                        <canvas id="orderChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="row g-4">
+        <!-- Deposit Trend Chart -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold text-dark">Deposit Trend (Last 30 Days)</h6>
+                        <span class="badge bg-light text-muted rounded-pill px-3 py-2 small fw-normal">
+                            <i class="fas fa-circle text-warning me-1" style="font-size: 0.5rem;"></i> Approved Amounts
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div style="height: 260px;">
+                        <canvas id="depositChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdraw Trend Chart -->
+        <div class="col-12 col-lg-6">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white border-0 py-3 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold text-dark">Withdraw Trend (Last 30 Days)</h6>
+                        <span class="badge bg-light text-muted rounded-pill px-3 py-2 small fw-normal">
+                            <i class="fas fa-circle text-success me-1" style="font-size: 0.5rem;"></i> Approved Amounts
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div style="height: 260px;">
+                        <canvas id="withdrawChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<!-- Dynamic Grid Performance Analytics Section Counters Array Components Layout View (Same as result.jpg grid array block structures) -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+
+<!-- Font Awesome 6 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ===================== USER SIGN-UP CHART =====================
+    const signupCtx = document.getElementById('signupChart').getContext('2d');
+    new Chart(signupCtx, {
+        type: 'line',
+        data: {
+            labels: @json($signupChartLabels),
+            datasets: [{
+                label: 'New Sign-ups',
+                data: @json($signupChartData),
+                borderColor: '#2A4563',
+                backgroundColor: 'rgba(42, 69, 99, 0.08)',
+                borderWidth: 2,
+                tension: 0.35,
+                fill: true,
+                pointRadius: 3,
+                pointBackgroundColor: '#2A4563',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: { precision: 0 }
+                }
+            }
+        }
+    });
+
+    // ===================== ORDERS DOUGHNUT CHART =====================
+    const orderCtx = document.getElementById('orderChart').getContext('2d');
+    new Chart(orderCtx, {
+        type: 'doughnut',
+        data: {
+            labels: @json($orderStatusLabels),
+            datasets: [{
+                data: @json($orderStatusData),
+                backgroundColor: [
+                    '#2A4563', '#F59E0B', '#10B981', '#EF4444',
+                    '#8B5CF6', '#EC4899', '#3B82F6', '#14B8A6',
+                ],
+                borderColor: '#ffffff',
+                borderWidth: 2,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 12,
+                        font: { size: 11 }
+                    }
+                }
+            },
+            cutout: '70%',
+        }
+    });
+
+    // ===================== DEPOSIT TREND CHART =====================
+    const depositCtx = document.getElementById('depositChart').getContext('2d');
+    new Chart(depositCtx, {
+        type: 'line',
+        data: {
+            labels: @json($depositChartLabels),
+            datasets: [{
+                label: 'Deposit Amount (Rs.)',
+                data: @json($depositChartData),
+                borderColor: '#F59E0B',
+                backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                borderWidth: 2,
+                tension: 0.35,
+                fill: true,
+                pointRadius: 3,
+                pointBackgroundColor: '#F59E0B',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) { return 'Rs. ' + value.toLocaleString(); }
+                    }
+                }
+            }
+        }
+    });
+
+    // ===================== WITHDRAW TREND CHART =====================
+    const withdrawCtx = document.getElementById('withdrawChart').getContext('2d');
+    new Chart(withdrawCtx, {
+        type: 'line',
+        data: {
+            labels: @json($withdrawalChartLabels),
+            datasets: [{
+                label: 'Withdraw Amount (Rs.)',
+                data: @json($withdrawalChartData),
+                borderColor: '#10B981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                borderWidth: 2,
+                tension: 0.35,
+                fill: true,
+                pointRadius: 3,
+                pointBackgroundColor: '#10B981',
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) { return 'Rs. ' + value.toLocaleString(); }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+
+<style>
+    /* Custom Purple color class */
+    .text-purple-500 {
+        color: #8B5CF6;
+    }
+    .text-pink-500 {
+        color: #EC4899;
+    }
+    .text-orange-500 {
+        color: #F97316;
+    }
     
-    <!-- Revenue Display Metric Counter Element -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Revenue</p>
-            <h3 class="text-2xl font-extrabold text-gray-900 mt-1">Rs. 0.00</h3>
-        </div>
-        <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-500 text-xl shadow-inner">
-            <i class="fa-solid fa-wallet"></i>
-        </div>
-    </div>
-
-    <!-- Profit Display Metric Counter Element -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Profit</p>
-            <h3 class="text-2xl font-extrabold text-gray-900 mt-1">Rs. 0.00</h3>
-        </div>
-        <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-500 text-xl shadow-inner">
-            <i class="fa-solid fa-chart-line"></i>
-        </div>
-    </div>
-
-    <!-- Orders Queue Display Metric Counter Element -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Orders</p>
-            <h3 class="text-2xl font-extrabold text-gray-900 mt-1">6</h3>
-        </div>
-        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-500 text-xl shadow-inner">
-            <i class="fa-solid fa-box-open"></i>
-        </div>
-    </div>
-
-    <!-- Reviews Counter Display Element -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Reviews</p>
-            <h3 class="text-2xl font-extrabold text-gray-900 mt-1">21</h3>
-        </div>
-        <div class="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-500 text-xl shadow-inner">
-            <i class="fa-solid fa-star"></i>
-        </div>
-    </div>
-
-</div>
-
-<!-- Row Array Block Component 2 Layer (Contacts, Riders, Users) -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    /* Card hover effect */
+    .card {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08) !important;
+    }
     
-    <!-- Contacts Counter Display Element -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Contacts</p>
-            <h3 class="text-2xl font-extrabold text-gray-900 mt-1">59</h3>
-        </div>
-        <div class="w-12 h-12 bg-pink-50 rounded-xl flex items-center justify-center text-pink-500 text-xl shadow-inner">
-            <i class="fa-solid fa-envelope"></i>
-        </div>
-    </div>
-
-    <!-- Riders Display Metric Element -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Riders</p>
-            <h3 class="text-2xl font-extrabold text-gray-900 mt-1">3</h3>
-        </div>
-        <div class="w-12 h-12 bg-sky-50 rounded-xl flex items-center justify-center text-sky-500 text-xl shadow-inner">
-            <i class="fa-solid fa-motorcycle"></i>
-        </div>
-    </div>
-
-    <!-- Users Counter Display Element -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center justify-between sm:col-span-2 lg:col-span-1">
-        <div>
-            <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Users</p>
-            <h3 class="text-2xl font-extrabold text-gray-900 mt-1">1,253</h3>
-        </div>
-        <div class="w-12 h-12 bg-orange-50 rounded-xl flex items-center justify-center text-orange-500 text-xl shadow-inner">
-            <i class="fa-solid fa-users"></i>
-        </div>
-    </div>
-
-</div>
-
-<!-- Analytics Graphs Data Layout Visual Section Mockup Array Content Blocks Area -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    /* Badge styling */
+    .badge.bg-light {
+        background-color: #f8f9fa !important;
+        color: #6c757d !important;
+    }
     
-    <!-- Left Hand Side Graph Panel Column Wrapper Line Matrix Box -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm lg:col-span-2">
-        <div class="flex items-center justify-between mb-4">
-            <h4 class="font-bold text-gray-900">Sales Overview Analytics</h4>
-            <span class="text-xs px-2.5 py-1 bg-gray-100 text-gray-600 rounded-full font-medium">Live Active Tracking Data Matrix</span>
-        </div>
-        <div class="h-64 flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200 text-gray-400">
-            [ Dynamic Graphical Data Line Engine Map Component Wrapper Frame Area ]
-        </div>
-    </div>
-
-    <!-- Right Hand Side Pie Donut Data Structure Layout Metric Panel Column Wrapper -->
-    <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
-        <div class="flex items-center justify-between mb-4">
-            <h4 class="font-bold text-gray-900">Orders Lifecycle Breakdown</h4>
-        </div>
-        <div class="h-64 flex items-center justify-center bg-gray-50 rounded-xl border border-dashed border-gray-200 text-gray-400">
-            [ Doughnut Segment Distribution Lifecycle Viewport Area ]
-        </div>
-    </div>
-
-</div>
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .card-body {
+            padding: 1.25rem !important;
+        }
+        .card-header {
+            padding: 0.75rem 1.25rem !important;
+        }
+        .card-header h6 {
+            font-size: 0.9rem;
+        }
+        .badge {
+            font-size: 0.7rem !important;
+            padding: 0.25rem 0.75rem !important;
+        }
+    }
+</style>
 @endsection

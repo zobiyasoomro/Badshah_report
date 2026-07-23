@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <link rel="icon" href="{{ asset('images/fav_icon.jpeg') }}" width="100" height="100">
+    <link rel="icon" href="{{ asset('images/fav_icon.png') }}" width="100" height="100">
 
     <!-- Internal CSS -->
     <style>
@@ -23,7 +23,6 @@
             background-color: #0f172a;
             min-height: 100vh;
             min-height: 100dvh;
-            /* For dynamic viewport height on mobile */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -57,7 +56,6 @@
             flex-direction: column;
         }
 
-        /* Custom Scrollbar */
         .auth-card::-webkit-scrollbar {
             width: 4px;
         }
@@ -71,12 +69,10 @@
             border-radius: 10px;
         }
 
-        /* Logo Styles */
         .logo-container {
             background: linear-gradient(to bottom right, #2A4563, #172844);
             text-align: center;
             border-bottom: 1px solid rgba(59, 90, 122, 0.3);
-            /* padding: 1.5rem 1.5rem; */
             flex-shrink: 0;
         }
 
@@ -87,7 +83,6 @@
             filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
         }
 
-        /* Tab Styles */
         .tab-container {
             display: flex;
             border-bottom: 1px solid rgba(59, 90, 122, 0.3);
@@ -116,14 +111,12 @@
             border-bottom: 2px solid #00E5FF;
         }
 
-        /* Form Styles */
         .form-container {
             padding: 2rem;
             flex: 1;
             overflow-y: auto;
         }
 
-        /* Label Styles */
         .form-label-custom {
             display: block;
             font-size: 0.8rem;
@@ -155,9 +148,7 @@
             font-size: 0.7rem;
         }
 
-        /* Input Fields */
         .form-group {
-            /* margin-bottom: 1.25rem; */
         }
 
         .form-group:last-of-type {
@@ -188,7 +179,6 @@
             font-size: 0.9rem;
         }
 
-        /* Bootstrap Grid Override for signup */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -199,7 +189,6 @@
             margin-bottom: 0;
         }
 
-        /* Buttons */
         .btn-login {
             width: 100%;
             background-color: #67e8f9;
@@ -257,15 +246,16 @@
             border: 1px solid rgba(209, 213, 219, 0.3);
             cursor: pointer;
             height: 50px;
+            text-decoration: none;
         }
 
         .btn-google:hover {
             background-color: #f3f4f6;
             transform: translateY(-1px);
             box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.2);
+            color: #111827;
         }
 
-        /* Links */
         .link-text {
             color: #00E5FF;
             cursor: pointer;
@@ -302,7 +292,6 @@
             font-size: 1.2rem;
         }
 
-        /* Alert message animations */
         .alert {
             animation: slideDown 0.5s ease forwards;
         }
@@ -319,7 +308,6 @@
             }
         }
 
-        /* Alert fade out animation */
         .alert-fade-out {
             animation: fadeOut 0.5s ease forwards;
         }
@@ -336,11 +324,6 @@
             }
         }
 
-        /* ============================================
-           FULLY RESPONSIVE WITH BOOTSTRAP 5
-           ============================================ */
-
-        /* Extra Small Devices (Phones, <576px) */
         @media (max-width: 575.98px) {
             body {
                 padding: 0.5rem;
@@ -420,7 +403,6 @@
             }
         }
 
-        /* Small Devices (Tablets, 576px - 767px) */
         @media (min-width: 576px) and (max-width: 767.98px) {
             .auth-card {
                 max-width: 100%;
@@ -452,7 +434,6 @@
             }
         }
 
-        /* Medium Devices (Tablets/Laptops, 768px - 991px) */
         @media (min-width: 768px) and (max-width: 991.98px) {
             .auth-card {
                 max-width: 26rem;
@@ -463,14 +444,12 @@
             }
         }
 
-        /* Large Devices (Desktops, 992px - 1199px) */
         @media (min-width: 992px) and (max-width: 1199.98px) {
             .auth-card {
                 max-width: 28rem;
             }
         }
 
-        /* Extra Large Devices (Large Desktops, 1200px+) */
         @media (min-width: 1200px) {
             .auth-card {
                 max-width: 30rem;
@@ -502,7 +481,6 @@
             }
         }
 
-        /* Landscape Mode for Mobile */
         @media (max-height: 600px) and (orientation: landscape) {
             .auth-wrapper {
                 padding: 0.5rem;
@@ -564,7 +542,6 @@
             }
         }
 
-        /* Very Small Screens (<= 360px) */
         @media (max-width: 360px) {
             .logo-image {
                 max-width: 90px;
@@ -603,16 +580,12 @@
 <body>
 
     <div class="auth-wrapper">
-        <!-- Main Card -->
         <div class="auth-card">
 
-            <!-- Logo Section -->
             <div class="logo-container">
                 <img src="{{ asset('images/nav_logo.png') }}" alt="BET PRO EXCHANGE" class="logo-image">
             </div>
 
-
-            <!-- Flash Messages -->
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show m-3" role="alert" id="successAlert"
                     style="background-color: #00E5FF; color: #0f172a; border: none; border-radius: 0.75rem; padding: 0.75rem 1rem;">
@@ -643,7 +616,6 @@
                 </div>
             @endif
 
-            <!-- Tab Switch -->
             <div class="tab-container">
                 <button onclick="switchTab('login')" id="loginTab" class="tab-button active">
                     LOGIN
@@ -653,7 +625,7 @@
                 </button>
             </div>
 
-            <!-- Login Form -->
+            <!-- Login Form (unchanged — admin/user still logs in with username+password) -->
             <div id="loginForm" class="form-container">
                 <form action="{{ route('auth.login') }}" method="POST">
                     @csrf
@@ -671,78 +643,49 @@
                         LOGIN NOW
                     </button>
                 </form>
-                <!-- <p class="text-muted-custom text-center-custom mt-3-custom">
-                    Don't have an account?
-                    <span onclick="switchTab('signup')" class="link-text">Sign Up</span>
-                </p> -->
             </div>
 
 
-            <!-- Signup Form -->
+            <!-- Signup Form: username/password fields removed — auto-assigned by backend -->
             <div id="signupForm" class="form-container hidden">
                 <form action="{{ route('auth.register') }}" method="POST">
                     @csrf
                     <div>
-                        <!-- Username Dropdown -->
-                        <div class="form-group">
-                            <label class="form-label-custom">Select Your Username</label>
-                            <select name="user_name" required class="form-input" id="userAccountSelect"
-                                style="appearance: auto; background-color: #2A4563; color: white; border: 1px solid rgba(59, 90, 122, 0.5);">
-                                <option value="" style="background-color: #172844; color: #9ca3af;">-- Select your
-                                    username --</option>
-                                @foreach($availableUsers as $account)
-                                    <option value="{{ $account->user_account }}"
-                                        data-password="{{ $account->user_password }}"
-                                        style="background-color: #172844; color: white; padding: 8px;">
-                                        {{ $account->user_account }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <small style="color: #9ca3af; font-size: 0.7rem; display: block; margin-top: 0.25rem;">
-                                <i class="fas fa-info-circle"></i> Select your pre-assigned username
-                            </small>
-                        </div>
+                        <!-- Username and password are auto-assigned server-side
+                             from the oldest available user_accounts row. -->
 
-                        <!-- Password - Auto-filled from selection -->
-                        <div class="form-group">
-                            <label class="form-label-custom">Your Password</label>
-                            <input type="text" name="password" id="userPassword" required class="form-input"
-                                placeholder="Password will auto-fill" readonly
-                                style="background-color: #1a2f47; cursor: not-allowed; color: #00E5FF; font-weight: 600;">
-                            <small style="color: #9ca3af; font-size: 0.7rem; display: block; margin-top: 0.25rem;">
-                                <i class="fas fa-lock"></i> Password is pre-defined for this account and will be
-                                encrypted
-                            </small>
-                        </div>
-
-                        <!-- Full Name & WhatsApp -->
+                        <!-- Full Name & WhatsApp — required -->
                         <div class="grid-2">
                             <div class="form-group">
                                 <label class="form-label-custom">Full Name</label>
                                 <input type="text" name="full_name" required class="form-input"
+                                    value="{{ old('full_name', session('google_full_name')) }}"
                                     placeholder="Enter full name">
                             </div>
                             <div class="form-group">
                                 <label class="form-label-custom">WhatsApp No.</label>
+                                <!-- CHANGED: added minlength/maxlength to match backend
+                                     validation of 11–12 characters -->
                                 <input type="tel" name="whatsapp" required class="form-input"
-                                    placeholder="Enter WhatsApp number">
+                                    minlength="11" maxlength="12"
+                                    placeholder="Enter WhatsApp number (11-12 digits)">
                             </div>
                         </div>
 
-                        <!-- City (Optional) -->
+                        <!-- City — required -->
                         <div class="form-group">
-                            <label class="form-label-custom">
-                                City <span class="optional-text">(Optional)</span>
-                            </label>
-                            <input type="text" name="city" class="form-input" placeholder="Enter your city">
+                            <label class="form-label-custom">City</label>
+                            <input type="text" name="city" required class="form-input" placeholder="Enter your city">
                         </div>
 
-                        <!-- Email (Optional) -->
+                        <!-- Email — stays optional -->
                         <div class="form-group">
                             <label class="form-label-custom">
                                 Email <span class="optional-text">(Optional)</span>
                             </label>
-                            <input type="email" name="email" class="form-input" placeholder="Enter your email address">
+                            <input type="email" name="email" class="form-input"
+                                value="{{ old('email', session('google_email')) }}"
+                                placeholder="Enter your email address">
                         </div>
 
                         <!-- Submit Button -->
@@ -752,12 +695,12 @@
                     </div>
                 </form>
 
-                <!-- Google Signup -->
+                <!-- Google Signup: real OAuth link, fills Full Name + Email only -->
                 <div class="mt-2-custom">
-                    <button onclick="signUpWithGoogle()" class="btn-google">
+                    <a href="{{ route('auth.google') }}" class="btn-google">
                         <i class="fab fa-google google-icon"></i>
                         Sign up with Google
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -765,22 +708,16 @@
 
     <!-- JavaScript -->
     <script>
-        // Auto-dismiss alerts after 3 seconds
         document.addEventListener('DOMContentLoaded', function () {
-            // Find all alert messages
             const alerts = document.querySelectorAll('.alert');
 
             alerts.forEach(function (alert) {
-                // Set timeout to auto-dismiss after 3 seconds (3000ms)
                 setTimeout(function () {
-                    // Add fade-out class for smooth animation
                     alert.classList.add('alert-fade-out');
-
-                    // After animation completes, remove the alert from DOM
                     setTimeout(function () {
                         alert.remove();
-                    }, 500); // Wait for animation to complete
-                }, 3000); // 3 seconds
+                    }, 500);
+                }, 3000);
             });
         });
 
@@ -810,32 +747,7 @@
             } else {
                 switchTab('login');
             }
-
-            // Auto-fill password when username is selected
-            const userSelect = document.getElementById('userAccountSelect');
-            const passwordInput = document.getElementById('userPassword');
-
-            if (userSelect && passwordInput) {
-                userSelect.addEventListener('change', function () {
-                    const selectedOption = this.options[this.selectedIndex];
-                    const password = selectedOption.getAttribute('data-password');
-
-                    if (password) {
-                        passwordInput.value = password;
-                        passwordInput.style.borderColor = '#00E5FF';
-                        passwordInput.style.boxShadow = '0 0 0 4px rgba(0, 229, 255, 0.15)';
-                    } else {
-                        passwordInput.value = '';
-                        passwordInput.style.borderColor = 'rgba(59, 90, 122, 0.5)';
-                        passwordInput.style.boxShadow = 'none';
-                    }
-                });
-            }
         };
-
-        function signUpWithGoogle() {
-            alert("Google Sign Up feature is coming soon!");
-        }
     </script>
 
     <!-- Bootstrap 5 JS -->

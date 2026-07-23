@@ -26,6 +26,15 @@ class BackendPageController extends Controller
         return view('admin.pages.platforms.index');
     }
 
+    public function planes()
+{
+    // Database se saare real planes ka data nikalna (Latest pehle dikhane ke liye latest() use kar sakte hain)
+    $planes = Plane::latest()->get(); 
+
+    // View file ko real data ke sath return karna
+    return view('admin.pages.planes.index', compact('planes'));
+}
+
     public function contact()
     {
         return view('admin.pages.contact.index');
@@ -36,4 +45,5 @@ class BackendPageController extends Controller
         $user = Auth::user();
         return view('admin.pages.profile.index', compact('user'));
     }
+
 }

@@ -129,7 +129,7 @@
 
     .footer-bottom {
         background-color: #1d334d;
-;
+        ;
         color: #ffffffef;
         padding: 20px 0;
         font-size: 13px;
@@ -417,22 +417,21 @@
             <div class="col-lg-3 col-md-6 mb-2 mb-lg-0 ps-md-5 text-center text-md-start">
                 <h5>Regular Links</h5>
                 <ul>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Home</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">About Us</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Products</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Gallery</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Contact Us</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="{{ route('pages.home') }}">Home</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="{{ route('pages.about') }}">About Us</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="{{ route('pages.platforms') }}">Platforms</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="{{ route('pages.planes') }}">Planes</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="{{ route('pages.contact') }}">Contact Us</a></li>
                 </ul>
             </div>
 
             <div class="col-lg-3 col-md-6 mb-5 mb-md-0 text-center text-md-start">
                 <h5>Essentials</h5>
                 <ul>
-                    <li><i class="fas fa-angle-right"></i><a href="#">All Category</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Wordpress</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">PHP Scripts</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Mobile Apps</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">HTML Templates</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="#">BetPro PK</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="#">BetPro Dubai</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="#">BetPro Saudi</a></li>
+
                 </ul>
             </div>
 
@@ -442,8 +441,8 @@
                     <li><i class="fas fa-angle-right"></i><a href="#">Help Center</a></li>
                     <li><i class="fas fa-angle-right"></i><a href="#">Forum</a></li>
                     <li><i class="fas fa-angle-right"></i><a href="#">FAQ</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Blog</a></li>
-                    <li><i class="fas fa-angle-right"></i><a href="#">Contact Us</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="{{ route('pages.blog') }}">Blog</a></li>
+                    <li><i class="fas fa-angle-right"></i><a href="{{ route('pages.contact') }}">Contact Us</a>
                 </ul>
             </div>
         </div>

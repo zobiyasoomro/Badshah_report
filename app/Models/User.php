@@ -79,4 +79,9 @@ class User extends Authenticatable
     {
         return $this->unregister_account == 1;
     }
+
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class);
+    }
 }

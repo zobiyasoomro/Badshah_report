@@ -1,4 +1,5 @@
 <?php
+// app/Http/Middleware/AdminMiddleware.php
 
 namespace App\Http\Middleware;
 
@@ -12,11 +13,17 @@ class AdminMiddleware
     {
         // Check if user is logged in
         if (!Auth::check()) {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Please login first.'], 401);
+            }
             return redirect()->route('auth.auth')->with('error', 'Please login first.');
         }
 
         // Check if user is admin
         if (Auth::user()->user_name !== 'betproadmin') {
+            if ($request->expectsJson()) {
+                return response()->json(['success' => false, 'message' => 'Access denied. Admin only.'], 403);
+            }
             return redirect()->route('pages.home')->with('error', 'Access denied. Admin only.');
         }
 

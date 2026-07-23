@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 // Remove: use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Laravel\Socialite\Facades\Socialite; // Google OAuth
 
 class RegisterController extends Controller
 {
@@ -20,13 +21,13 @@ class RegisterController extends Controller
 
     public function register(Request $request)
     {
-        // Validate the incoming request including all contact and social fields
+        // user_name and password are auto-assigned from the oldest available
+        // user_accounts row below — not submitted by the form.
         $request->validate([
-            'user_name' => 'required|string|exists:user_accounts,user_account',
-            'password' => 'required|string|min:8',
             'full_name' => 'required|string|max:255',
-            'whatsapp' => 'required|string|max:20',
-            'city' => 'nullable|string|max:255',
+            // CHANGED: WhatsApp number must be between 11 and 12 digits/characters
+            'whatsapp' => 'required|string|min:11|max:12',
+            'city' => 'required|string|max:255',
             'email' => 'nullable|email|max:255|unique:users,email',
 
             // --- CONTACT INFO FIELDS ---
@@ -45,70 +46,45 @@ class RegisterController extends Controller
             // Start transaction
             DB::beginTransaction();
 
-            // Get the user account
-            $userAccount = UserAccount::where('user_account', $request->user_name)->first();
+            // Auto-assign the oldest available user_accounts row
+            // (FIFO — first admin-created account goes to the first
+            // person who signs up) instead of reading user_name from
+            // the request.
+            $userAccount = UserAccount::oldest()->first();
 
             if (!$userAccount) {
-                throw new \Exception('User account not found!');
+                // No accounts left for admin to hand out — fail cleanly
+                // instead of crashing on a null object.
+                throw new \Exception('No accounts are currently available. Please contact support.');
             }
 
-            // Check if this user already exists in users table
-            $existingUser = User::where('user_name', $request->user_name)->first();
+            // Create new user in users table with PLAIN TEXT password,
+            // using the auto-assigned username/password from user_accounts.
+            $user = User::create([
+                'user_name' => $userAccount->user_account,
+                'name' => $request->full_name,
+                'email' => $request->email,
+                // STORE PASSWORD IN PLAIN TEXT (NO HASH)
+                'password' => $userAccount->user_password,
+                'whatsapp_number' => $request->whatsapp,
+                'city' => $request->city,
 
-            if ($existingUser) {
-                // If user already exists, update their details
-                $existingUser->update([
-                    'name' => $request->full_name,
-                    'email' => $request->email,
-                    'whatsapp_number' => $request->whatsapp,
-                    'city' => $request->city,
+                // --- CONTACT INFO FIELDS ---
+                'address' => $request->address,
+                'state' => $request->state,
+                'country' => $request->country,
 
-                    // --- CONTACT INFO FIELDS ---
-                    'address' => $request->address,
-                    'state' => $request->state,
-                    'country' => $request->country,
+                // --- SOCIAL PROFILES FIELDS ---
+                'linkedin_url' => $request->linkedin_url,
+                'instagram_url' => $request->instagram_url,
+                'twitter_url' => $request->twitter_url,
+                'facebook_url' => $request->facebook_url,
 
-                    // --- SOCIAL PROFILES FIELDS ---
-                    'linkedin_url' => $request->linkedin_url,
-                    'instagram_url' => $request->instagram_url,
-                    'twitter_url' => $request->twitter_url,
-                    'facebook_url' => $request->facebook_url,
+                'register_account' => 1,
+                'unregister_account' => 0,
+            ]);
 
-                    // STORE PASSWORD IN PLAIN TEXT (NO HASH)
-                    'password' => $request->password,
-                    'register_account' => 1,
-                    'unregister_account' => 0,
-                ]);
-
-                $user = $existingUser;
-            } else {
-                // Create new user in users table with PLAIN TEXT password
-                $user = User::create([
-                    'user_name' => $request->user_name,
-                    'name' => $request->full_name,
-                    'email' => $request->email,
-                    // STORE PASSWORD IN PLAIN TEXT (NO HASH)
-                    'password' => $request->password,
-                    'whatsapp_number' => $request->whatsapp,
-                    'city' => $request->city,
-
-                    // --- CONTACT INFO FIELDS ---
-                    'address' => $request->address,
-                    'state' => $request->state,
-                    'country' => $request->country,
-
-                    // --- SOCIAL PROFILES FIELDS ---
-                    'linkedin_url' => $request->linkedin_url,
-                    'instagram_url' => $request->instagram_url,
-                    'twitter_url' => $request->twitter_url,
-                    'facebook_url' => $request->facebook_url,
-
-                    'register_account' => 1,
-                    'unregister_account' => 0,
-                ]);
-            }
-
-            // Delete the user from user_accounts table (moved to users table)
+            // Delete the user_accounts row now that it's been claimed
             $userAccount->delete();
 
             // Commit transaction
@@ -140,6 +116,39 @@ class RegisterController extends Controller
         }
     }
 
+    // ==========================================================
+    // Google OAuth — redirect step
+    // Sends the user to Google's consent screen.
+    // ==========================================================
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    // ==========================================================
+    // Google OAuth — callback step
+    // Google sends the user back here after they approve.
+    // We only pull their name/email and stash it in session so the
+    // signup form can prefill Full Name and Email.
+    // ==========================================================
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('auth.auth')
+                ->with('error', 'Google sign-in failed. Please try again.');
+        }
+
+        session()->flash('google_full_name', $googleUser->getName());
+        session()->flash('google_email', $googleUser->getEmail());
+
+        return redirect()
+            ->route('auth.auth', ['signup' => 1])
+            ->with('success', 'Google details loaded. Please complete your account setup.');
+    }
+
     public function updateProfile(Request $request)
     {
         $user = Auth::user();
@@ -162,12 +171,10 @@ class RegisterController extends Controller
             'instagram_url' => 'nullable|url|max:255',
             'twitter_url' => 'nullable|url|max:255',
             'facebook_url' => 'nullable|url|max:255',
-            // Password validation - only if password fields are filled
             'current_password' => 'nullable|string|required_with:new_password',
             'new_password' => 'nullable|string|min:8|confirmed|required_with:current_password',
         ]);
 
-        // Update profile information
         $user->name = $request->full_name;
         $user->email = $request->email;
         $user->whatsapp_number = $request->whatsapp_number;
@@ -180,7 +187,6 @@ class RegisterController extends Controller
         $user->twitter_url = $request->twitter_url;
         $user->facebook_url = $request->facebook_url;
 
-        // Image Upload in public/users
         if ($request->hasFile('image')) {
             if ($user->image && file_exists(public_path('users/' . $user->image))) {
                 @unlink(public_path('users/' . $user->image));
@@ -192,14 +198,11 @@ class RegisterController extends Controller
             $user->image = $filename;
         }
 
-        // Update password if provided
         if ($request->filled('current_password') && $request->filled('new_password')) {
-            // Check if current password matches (plain text comparison)
             if ($user->password !== $request->current_password) {
                 return back()->with('error', 'Current password is incorrect.');
             }
 
-            // Store new password in plain text
             $user->password = $request->new_password;
         }
 
@@ -215,10 +218,8 @@ class RegisterController extends Controller
             'password' => 'required|string',
         ]);
 
-        // Find user by username
         $user = User::where('user_name', $request->user_name)->first();
 
-        // DIRECT PLAIN TEXT COMPARISON (NO HASH)
         if (!$user || $user->password !== $request->password) {
             return redirect()
                 ->back()
@@ -226,7 +227,6 @@ class RegisterController extends Controller
                 ->with('error', 'Invalid username or password');
         }
 
-        // Check if user is registered
         if ($user->register_account == 0) {
             return redirect()
                 ->back()
@@ -234,15 +234,12 @@ class RegisterController extends Controller
                 ->with('error', 'Your account is not registered. Please contact support.');
         }
 
-        // Login user
         auth()->login($user);
 
-        // Check if user is admin using the isAdmin() method
         if ($user->isAdmin()) {
             return redirect()->route('admin.dashboard')->with('success', 'Welcome Admin!');
         }
 
-        // Redirect regular users to home page
         return redirect()->route('pages.home')->with('success', 'Welcome back, ' . $user->name . '!');
     }
 
@@ -261,30 +258,11 @@ class RegisterController extends Controller
         return view('auth.auth', compact('availableUsers'));
     }
 
-
     public function showProfile()
     {
         $user = Auth::user();
         return view('admin.pages.profile.index', compact('user'));
     }
-
-    // public function updateProfile(Request $request)
-    // {
-    //     $user = Auth::user();
-
-    //     $request->validate([
-    //         'name' => 'required|string|max:255',
-    //         'email' => 'required|email|unique:users,email,' . $user->id,
-    //         'whatsapp_number' => 'nullable|string|max:20',
-    //     ]);
-
-    //     $user->name = $request->name;
-    //     $user->email = $request->email;
-    //     $user->whatsapp_number = $request->whatsapp_number;
-    //     $user->save();
-
-    //     return back()->with('success', 'Profile updated successfully!');
-    // }
 
     public function updatePassword(Request $request)
     {
@@ -295,12 +273,10 @@ class RegisterController extends Controller
             'new_password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Since you store passwords in plain text, compare directly
         if ($user->password !== $request->current_password) {
             return back()->with('error', 'Current password is incorrect.');
         }
 
-        // Store new password in plain text
         $user->password = $request->new_password;
         $user->save();
 

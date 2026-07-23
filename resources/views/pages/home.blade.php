@@ -4,8 +4,9 @@
 
 @include('components.user-profile-section')
 @include('components.btns')
+@include('components.about')
 
-@include('components.faq')
 @include('components.testimonial')
+@include('components.faq')
 
 @endsection

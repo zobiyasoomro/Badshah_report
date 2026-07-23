@@ -1,8 +1,14 @@
 <style>
     /* =========================
-           BODY & GLOBAL
+           PERMANENT DESKTOP HIDE (Placed at top for safety)
         ========================= */
+    .mobile-support-item {
+        display: none;
+    }
 
+    .close-menu {
+        display: none;
+    }
 
     /* =========================
            NAVBAR MAIN CONTAINER
@@ -14,9 +20,10 @@
         padding: 10px 0;
         min-height: 100px;
         box-shadow: 0 8px 25px rgba(0, 0, 0, .35);
+        position: relative;
+        z-index: 1000;
     }
 
-    /* Ensures absolute elements align with the grid container bounds */
     .navbar-custom .container {
         position: relative;
         display: flex;
@@ -33,7 +40,6 @@
         position: absolute;
         top: 100%;
         left: 12px;
-        /* Aligns perfectly with the container layout edge */
         transform: translateY(-50%);
         z-index: 10005;
     }
@@ -58,7 +64,6 @@
     .navbar-nav {
         gap: 18px;
         margin-left: 160px;
-        /* Offset ensures links never clip behind the logo */
     }
 
     .navbar-nav .nav-link {
@@ -95,7 +100,6 @@
     .profile-dropdown-wrapper {
         position: relative;
         z-index: 10030;
-        /* Higher priority so dropdown is always clickable over mobile overlays */
     }
 
     .dropdown-toggle {
@@ -112,8 +116,6 @@
     .profile-container {
         display: flex;
         align-items: center;
-        /* gap: 12px; */
-        /* padding: 7px 14px; */
         border-radius: 40px;
         transition: .3s;
     }
@@ -177,9 +179,6 @@
     /* =========================
            TOGGLER & X MORPH ANIMATION
         ========================= */
-    /* =========================
-   MORPHING HAMBURGER TO X ANIMATION
-========================= */
     .navbar-toggler {
         border: 1px solid #27d5e4;
         padding: 8px 10px;
@@ -205,13 +204,11 @@
         transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
-    /* Morph to X with rotation and color */
     .navbar-toggler:not(.collapsed) .navbar-toggler-icon {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%2327d5e4'%3e%3cpath d='M.293.293a1 1 0 0 1 1.414 0L8 6.586 14.293.293a1 1 0 1 1 1.414 1.414L9.414 8l6.293 6.293a1 1 0 0 1-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 0 1-1.414-1.414L6.586 8 .293 1.707a1 1 0 0 1 0-1.414z'/%3e%3c/svg%3e");
         transform: rotate(180deg) scale(1.1);
     }
 
-    /* Glowing border effect when menu is open */
     .navbar-toggler:not(.collapsed) {
         border-color: #27d5e4;
         box-shadow: 0 0 20px rgba(39, 213, 228, 0.25);
@@ -219,63 +216,8 @@
     }
 
     /* =========================
-           RESPONSIVE MEDIA OVERRIDES
+           ADDITIONAL STYLES (kept from original)
         ========================= */
-    @media (max-width: 769px) {
-        .navbar-custom {
-            min-height: 80px;
-        }
-
-        .navbar-custom .container {
-            display: flex !important;
-            flex-direction: row !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-        }
-
-        /* Center logo perfectly on mobile screens */
-        .navbar-brand {
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .logo-img {
-            margin-top: 8px;
-            width: 130px;
-            height: 130px;
-        }
-
-        /* Keeps dropdown menus cleanly confined to viewport boundaries */
-        .dropdown-menu-end {
-            right: 0 !important;
-            left: auto !important;
-        }
-
-        /* Collapsible panel menu drawer setup */
-        .navbar-collapse {
-            border-radius: 4%;
-            position: absolute;
-            top: 137%;
-            left: 0;
-            right: 0;
-            width: 100%;
-            background: #2A4563;
-            padding: 40px 20px 20px 20px;
-            border-bottom: 2px solid #00d4ff;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-            z-index: 10000;
-            /* Lower layer depth index priority compared to interactive avatar wrappers */
-        }
-
-        .navbar-nav {
-            margin: 0;
-            text-align: center;
-            gap: 20px;
-        }
-    }
-
     .profile-container {
         display: flex;
         align-items: center;
@@ -345,6 +287,169 @@
     .btn:focus {
         box-shadow: none;
     }
+
+    /* Prevent body scroll when menu is open */
+    .menu-open {
+        overflow: hidden;
+    }
+
+    /* =========================
+           RESPONSIVE MEDIA OVERRIDES (Placed at the VERY BOTTOM to guarantee it works)
+        ========================= */
+    @media (max-width: 769px) {
+        .navbar-custom {
+            min-height: 80px;
+        }
+
+        .navbar-custom .container {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+
+        .navbar-brand {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .logo-img {
+            margin-top: 8px;
+            width: 130px;
+            height: 130px;
+        }
+
+        .dropdown-menu-end {
+            right: 0 !important;
+            left: auto !important;
+        }
+
+        /* =============================================
+           MOBILE MENU - SLIDING FROM LEFT SIDE
+        ============================================= */
+        .navbar-collapse {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100vh;
+            background: #2A4563;
+            padding: 70px 20px 30px 20px;
+            overflow-y: auto;
+            transition: left 0.2s ease-out;
+            border-right: 2px solid #00d4ff;
+            box-shadow: 5px 0 30px rgba(0, 0, 0, 0.5);
+            z-index: 10050;
+        }
+
+        .navbar-collapse.show {
+            left: 0;
+        }
+
+        /* Close button inside the menu */
+        .navbar-collapse .close-menu {
+            display: block !important;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #00d4ff;
+            font-size: 28px;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10060;
+            line-height: 1;
+        }
+
+        .navbar-collapse .close-menu:hover {
+            transform: rotate(90deg);
+            color: #fff;
+        }
+
+        .navbar-nav {
+            margin: 0;
+            text-align: left;
+            gap: 8px;
+            flex-direction: column;
+        }
+
+        .navbar-nav .nav-item {
+            width: 100%;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .navbar-nav .nav-link {
+            padding: 12px 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .navbar-nav .nav-link i {
+            width: 22px;
+            text-align: center;
+            color: #00d4ff;
+            font-size: 18px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            background: rgba(0, 212, 255, 0.1);
+            padding-left: 25px;
+        }
+
+        .navbar-nav .nav-link::after {
+            display: none;
+        }
+
+        /* ===== SUPPORT SECTION (Forces display on mobile) ===== */
+        .mobile-support-item {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            padding: 20px 15px 10px 15px !important;
+            border-bottom: none !important;
+            width: 100%;
+            margin-top: auto;
+            /* Pushes it to the bottom */
+        }
+
+        .mobile-support-item .support-label {
+            color: rgba(255, 255, 255, 0.5) !important;
+            font-size: 0.7rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1.5px !important;
+            font-weight: 600 !important;
+            margin-bottom: 6px !important;
+        }
+
+        .mobile-support-item .support-email {
+            color: #00d4ff !important;
+            text-decoration: none !important;
+            font-weight: 500 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 10px !important;
+            font-size: 0.95rem !important;
+            transition: 0.3s !important;
+        }
+
+        .mobile-support-item .support-email i {
+            font-size: 16px !important;
+            width: 22px !important;
+            text-align: center !important;
+        }
+
+        .mobile-support-item .support-email:hover {
+            color: #fff !important;
+            text-decoration: underline !important;
+        }
+    }
 </style>
 
 
@@ -365,7 +470,7 @@
                 aria-expanded="false" style="border: none; background: transparent;">
                 <div class="profile-container">
                     <div class="profile-avatar">
-                      @if(Auth::check() && Auth::user()->image)
+                        @if(Auth::check() && Auth::user()->image)
                             <img src="{{ asset('users/' . Auth::user()->image) }}" alt="{{ Auth::user()->name }}"
                                 style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
                         @else
@@ -395,12 +500,17 @@
                     <li><a class="dropdown-item" href="{{ route('pages.userprofile') }}" style="font-size: larger;">
                             <i class="fas fa-user-edit me-2"></i> My Account
                         </a></li>
-                    <li><a class="dropdown-item" href="#" style="font-size: larger;">
-                            <i class="fas fa-arrow-up me-2"></i> Withdraw
-                        </a></li>
-                    <li><a class="dropdown-item" href="#" style="font-size: larger;">
-                            <i class="fas fa-arrow-down me-2"></i> Deposit
-                        </a></li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ route('pages.deposit.history') }}" style="font-size: larger;">
+                            <i class="fas fa-arrow-down me-2"></i> Deposit History
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ route('pages.withdraw.history') }}" style="font-size: larger;">
+                            <i class="fas fa-arrow-up me-2"></i> Withdraw History
+                        </a>
+                    </li>
                     <li>
                         <hr class="dropdown-divider">
                     </li>
@@ -426,15 +536,70 @@
         </div>
 
         <div class="collapse navbar-collapse order-2" id="navbarNav">
+            <!-- Close (X) button for mobile -->
+            <button class="close-menu" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-label="Close menu">
+                <i class="fas fa-times"></i>
+            </button>
+
             <ul class="navbar-nav mx-auto">
-                <li class="nav-item"><a class="nav-link" href="{{ route('pages.home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('pages.about') }}">About</a>
-                <li class="nav-item"><a class="nav-link" href="{{ route('pages.platforms') }}">Platforms</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('pages.planes') }}">Planes</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('pages.blog') }}">Blogs</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('pages.contact') }}">Contact Us</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pages.home') }}">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pages.about') }}">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pages.platforms') }}">
+                        <i class="fas fa-th-large"></i> Platforms
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pages.planes') }}">
+                        <i class="fas fa-gem"></i> Planes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pages.blog') }}">
+                        <i class="fas fa-blog"></i> Blogs
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pages.contact') }}">
+                        <i class="fas fa-envelope"></i> Contact Us
+                    </a>
+                </li>
+
+                <!-- ===== SUPPORT ITEM (Mobile Only) ===== -->
+                <li class="nav-item mobile-support-item">
+                    <span class="support-label">
+                        <i class="fas fa-headset"></i> Support
+                    </span>
+                    <a href="mailto:contact@betpro.com" class="support-email">
+                        <i class="fas fa-envelope"></i> contact@betpro.com
+                    </a>
+                </li>
             </ul>
         </div>
 
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const navbarCollapse = document.getElementById('navbarNav');
+        const body = document.body;
+
+        navbarCollapse.addEventListener('show.bs.collapse', function () {
+            body.classList.add('menu-open');
+        });
+
+        navbarCollapse.addEventListener('hidden.bs.collapse', function () {
+            body.classList.remove('menu-open');
+        });
+    });
+</script>

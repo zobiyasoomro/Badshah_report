@@ -19,7 +19,7 @@
         align-items: center;
     }
 
-    @media (min-width: 769) {
+    @media (min-width: 769px) { /* FIXED: Added px */
         .account-section {
             min-height: 70vh;
         }
@@ -254,7 +254,7 @@
         color: #ffffff !important;
         padding: 12px 15px;
         width: 100%;
-        border-radius: 8px 0 0 8px;
+        border-radius: 8px;
         font-size: 0.95rem;
         letter-spacing: 0.5px;
         font-weight: 500;
@@ -344,6 +344,56 @@
     .form-label-custom i {
         color: #00e5ff;
         margin-right: 4px;
+    }
+
+    /* ===== WEBSITE ITEMS (icon + label) ===== */
+    .website-icons-container {
+        background: rgba(20, 40, 60, 0.9) !important;
+        border: 1px solid rgba(30, 58, 80, 0.6);
+        border-radius: 8px;
+        padding: 12px 10px;
+        min-height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        transition: all 0.3s ease;
+        pointer-events: auto !important;
+        flex-wrap: wrap;
+    }
+
+    .website-icons-container:hover {
+        border-color: rgba(0, 229, 255, 0.3);
+    }
+
+    .website-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+        text-decoration: none;
+        pointer-events: auto !important;
+        cursor: pointer;
+    }
+
+    .website-item img {
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .website-item img:hover {
+        transform: translateY(-3px) scale(1.08);
+        box-shadow: 0 6px 20px rgba(0, 229, 255, 0.35);
+    }
+
+    .website-label {
+        color: rgba(255, 255, 255, 0.8);
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: center;
+        white-space: nowrap;
+        pointer-events: none;
     }
 
     /* ===== GUEST MESSAGE ===== */
@@ -462,6 +512,18 @@
             max-width: 200px;
             font-size: 14px;
         }
+
+        .website-item img {
+            width: 40px;
+            height: 40px;
+        }
+        .website-label {
+            font-size: 0.65rem;
+        }
+        .website-icons-container {
+            padding: 10px 8px;
+            min-height: 70px;
+        }
     }
 
     @media (max-width: 768px) {
@@ -475,8 +537,6 @@
 
         .side-card {
             min-height: 300px;
-            /* padding: 25px 15px; */
-            /* margin-top: 20px; */
         }
 
         .logo-circle {
@@ -501,6 +561,18 @@
 
         .guest-message h3 {
             font-size: 1.5rem;
+        }
+
+        .website-item img {
+            width: 36px;
+            height: 36px;
+        }
+        .website-label {
+            font-size: 0.6rem;
+        }
+        .website-icons-container {
+            padding: 8px 6px;
+            min-height: 60px;
         }
     }
 
@@ -532,6 +604,19 @@
         .btn-copy {
             font-size: 0.7rem;
             padding: 6px 12px;
+        }
+
+        .website-item img {
+            width: 32px;
+            height: 32px;
+        }
+        .website-label {
+            font-size: 0.55rem;
+        }
+        .website-icons-container {
+            padding: 6px 4px;
+            min-height: 50px;
+            gap: 6px;
         }
     }
 
@@ -604,34 +689,53 @@
                             </label>
                             <div class="input-group">
                                 <input type="text" class="form-control form-control-custom" id="pass-id"
-                                    value="{{ $user->password_plain ?? '********' }}" readonly disabled
+                                    value="********"
+                                    data-real-value="{{ $user->password ?? '' }}"
+                                    readonly disabled
                                     onfocus="this.blur()" onselectstart="return false" oncopy="return false"
                                     oncut="return false" ondrag="return false" ondrop="return false"
                                     oncontextmenu="return false">
-                                <button class="btn btn-copy" onclick="copyText('pass-id', this)">
+                                <button class="btn btn-copy" onclick="copyRealValue('pass-id', this)">
                                     <i class="fas fa-copy me-1"></i> Copy
                                 </button>
                             </div>
                         </div>
 
+                        <!-- ===== WEBSITE ICONS WITH LABELS (REPLACED WITH YOUR IMAGES) ===== -->
                         <div class="mb-0">
                             <label class="form-label-custom">
-                                <i class="fab fa-whatsapp"></i> WhatsApp Number
+                                <i class="fas fa-globe"></i> Our Websites
                             </label>
-                            <input type="text" class="form-control form-control-custom" value="{{ $user->whatsapp_number }}"
-                                readonly disabled onfocus="this.blur()" onselectstart="return false" oncopy="return false"
-                                oncut="return false" ondrag="return false" ondrop="return false"
-                                oncontextmenu="return false">
+                            <div class="website-icons-container">
+                                <a href="#" class="website-item" target="_blank">
+                                    <!-- Map to: BP_Blue.png -->
+                                    <img src="{{ asset('images/bp_blue.png') }}" alt="Betpro Dubai Logo" style="width: 44px; height: 44px; object-fit: contain; border-radius: 50%;">
+                                    <span class="website-label">Betpro Dubai</span>
+                                </a>
+                                <a href="#" class="website-item" target="_blank">
+                                    <!-- Map to: Green_b.png -->
+                                    <img src="{{ asset('images/bp_black.png') }}" alt="Betpro Pk Logo" style="width: 44px; height: 44px; object-fit: contain; border-radius: 50%;">
+                                    <span class="website-label">Betpro Pk</span>
+                                </a>
+                                <a href="#" class="website-item" target="_blank">
+                                    <!-- Map to: Cyan_BP.png -->
+                                    <img src="{{ asset('images/bp_green.png') }}" alt="Betpro Saudi Logo" style="width: 44px; height: 44px; object-fit: contain; border-radius: 50%;">
+                                    <span class="website-label">Betpro Saudi</span>
+                                </a>
+                            </div>
                         </div>
+                        <!-- =========================================== -->
+
                     </div>
                 </div>
 
                 <div class="col-lg-5 col-xl-4">
                     <div
                         class="card-custom side-card text-center h-100 d-flex flex-column align-items-center justify-content-center">
-                        <!-- Logo -->
+                        <!-- Main Logo Circle -->
                         <div class="mb-3 logo-circle">
-                            <img src="{{ asset('images/login_logo.png') }}" alt="Logo">
+                            <!-- Using the Blue BP Logo as your Main Brand Logo -->
+                            <img src="{{ asset('images/login_logo.png') }}" alt="Betpro Logo">
                         </div>
 
                         <!-- Welcome Text -->
@@ -716,7 +820,7 @@
         });
     });
 
-    // ===== COPY FUNCTION =====
+    // ===== COPY FUNCTION (copies exactly what's shown in the field) =====
     function copyText(id, btn) {
         const input = document.getElementById(id);
         const originalHTML = btn.innerHTML;
@@ -724,6 +828,42 @@
         if (!input) return;
 
         const textToCopy = input.value;
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                btn.innerHTML = '<i class="fas fa-check me-1"></i> COPIED!';
+                btn.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                btn.style.color = '#ffffff';
+                btn.style.borderColor = '#28a745';
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = 'linear-gradient(135deg, #1e3a50, #162d40)';
+                    btn.style.color = '#00e5ff';
+                    btn.style.borderColor = 'rgba(30, 58, 80, 0.6)';
+                }, 2000);
+            }).catch(() => {
+                fallbackCopy(textToCopy, btn, originalHTML);
+            });
+        } else {
+            fallbackCopy(textToCopy, btn, originalHTML);
+        }
+    }
+
+    // ===== COPY FUNCTION FOR MASKED FIELDS (copies the real hidden value, not the displayed mask) =====
+    function copyRealValue(id, btn) {
+        const input = document.getElementById(id);
+        const originalHTML = btn.innerHTML;
+
+        if (!input) return;
+
+        const textToCopy = input.dataset.realValue || '';
+
+        if (!textToCopy) {
+            btn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i> N/A';
+            setTimeout(() => { btn.innerHTML = originalHTML; }, 1500);
+            return;
+        }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
             navigator.clipboard.writeText(textToCopy).then(() => {

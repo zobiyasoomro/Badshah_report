@@ -2,12 +2,12 @@
 @section('title', 'About Page Settings')
 @section('admin_content')
 
-    <div class="container-fluid py-5 about-editor-scope">
+    <div class="container-fluid about-editor-scope">
         <div class="row justify-content-center g-4">
             {{-- ===================== LIVE PREVIEW PANEL ===================== --}}
             <div class="col-12 col-xl-5">
                 <div class="preview-sticky">
-                    <p class="preview-label"><i class="bi bi-eye me-1"></i> Frontend Preview</p>
+                    
 
                     <div class="preview-card">
                         <div class="preview-ring">
@@ -23,7 +23,7 @@
                         </p>
                     </div>
 
-                    <p class="preview-footnote">This mirrors the hero section on the public About page.</p>
+                  
                 </div>
             </div>
 
